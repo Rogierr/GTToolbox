@@ -1,10 +1,6 @@
 import numpy as np  #import numpy
-import scipy as sp  #import scipy
-from scipy import optimize #import the scipy optimize part
-from scipy import linalg #import the linear algebra section
 from scipy.spatial import ConvexHull #import scipy convex hull package
 import matplotlib.pyplot as plt #import package to plot stuff
-import mdptoolbox #import toolbox for MDP's
 import time #import time package
 
 
@@ -31,19 +27,6 @@ class ETPGame:
         self.printing = False  # set printing to False
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
-
-    def aitken_delta_squared(self, q1, q2, q3):
-        "This is the Aitken's Delta Squared accelerator"
-
-        x3_x2 = np.subtract(q3, q2)
-        x2_x1 = np.subtract(q2, q1)
-
-        x3_x2_squared = np.power(x3_x2, 2)
-        denominator = np.subtract(x3_x2, x2_x1)
-
-        fraction = np.divide(x3_x2_squared, denominator)
-
-        return np.subtract(q3, fraction)
 
     def activate_FD(self):
 
