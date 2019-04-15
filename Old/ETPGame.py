@@ -28,27 +28,6 @@ class ETPGame:
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
-    def adjust_mu(self, m):
-
-        self.m = m
-
-        print("Mu adjusted, now has:")
-        print("M = ", m)
-
-    def adjust_FD(self, type_function):
-
-        if type_function == "mu":
-            self.FD_function_use = "mu"
-            self.m = 0
-        else:
-            self.FD_function_use = "FD"
-
-    def FD_function(self, x):
-
-        FD = 1 - 0.25 * (x[:, 1] + x[:, 2]) - (1 / 3) * x[:, 3] - (1 / 2) * (x[:, 5] + x[:, 6]) - (2 / 3) * x[:, 7]
-
-        return FD
-
     def plotting_rarity(self, plot):
 
         if plot == "Rarity":
@@ -61,29 +40,6 @@ class ETPGame:
             self.plotting_rarity = False
 
         print("Plotting rarity is now:", self.plotting_rarity)
-
-    def rho_function(self, x):
-
-        rho = float(3 / 8) * (x[:, 1] + x[:, 2] + 2 * (x[:, 5] + x[:, 6])) + float(1 / 2) * (x[:, 3] + 2 * x[:, 7])
-
-        return rho
-
-    def mu_function(self, rho):
-        m = self.m
-        #         mu = 1 + (1 - m) * ((n2/(n1-n2))*rho**n1 - (n1/(n1-n2))*rho**n2)
-        mu = 1 + (1 - m) * (2 * rho ** 3 - 3 * rho ** 2)
-
-        return mu
-
-    def profit_function(self, mu):
-
-        first_part = np.divide(1, 3.75)
-        second_part = 4 + np.multiply(0.75, np.divide(1, np.power(mu, 2)))
-        third_part = 12 + np.multiply((1 - 12 * mu ** 2.5), np.divide(1, np.power(mu, 1.5)))
-
-        combined_last = second_part - third_part
-
-        return np.multiply(first_part, combined_last)
 
     def optimized_maximin(self, points, show_strat_p1, show_strat_p2, FD_yn):
         "This is an optimized version for determining the maximin result"
