@@ -1,5 +1,5 @@
-import numpy as np  #import numpy
-from scipy.spatial import ConvexHull #import scipy convex hull package
+import numpy as np  # import numpy
+from scipy.spatial import ConvexHull # import scipy convex hull package
 import matplotlib.pyplot as plt #import package to plot stuff
 import time #import time package
 

@@ -1,4 +1,5 @@
-def activate_FD(self):
+def activate_fd(self):
+
     print("Game is now an ESP game")
 
     self.FD = True

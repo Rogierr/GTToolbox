@@ -1,5 +1,8 @@
+import numpy as np
+
+
 def aitken_delta_squared(q1, q2, q3):
-    "This is the Aitken's Delta Squared accelerator, a stable version"
+    """This is the Aitken's Delta Squared accelerator, a stable version"""
 
     x3_x2 = np.subtract(q3, q2)
     x2_x1 = np.subtract(q2, q1)
