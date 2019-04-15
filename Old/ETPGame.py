@@ -28,43 +28,6 @@ class ETPGame:
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
-    def activate_FD(self):
-
-        print("Game is now an ESP game")
-
-        self.FD = True
-        self.FD_function_use = "FD"
-
-    def deactivate_FD(self):
-
-        print("FD function deactivated")
-        self.FD = False
-
-    def activate_rarity(self):
-
-        print("Rarity function active")
-
-        self.rarity = True
-
-    def deactivate_rarity(self):
-
-        print("Rarity function deactivated")
-
-        self.rarity = False
-
-    def activate_hysteresis(self, phi):
-
-        print("Hysteresis is now active")
-
-        self.hysteresis = True
-        self.phi = phi
-
-    def deactivate_hysteresis(self):
-
-        print("Hysteresis disabled")
-
-        self.hysteresis = False
-
     def adjust_mu(self, m):
 
         self.m = m
