@@ -1,3 +1,5 @@
+import matplotlib.pylab as plt
+
 def plot_single_period_pure_rewards(self):
     "Here we plot the pure rewards possible for a single period"
 
@@ -16,3 +18,4 @@ def plot_single_period_pure_rewards(self):
     plt.ylabel("Payoff Player 2")  # and the payoff of the y-axis is that of p2
     plt.title("Reward points of ETP game")  # and we give it a nice titel
     plt.legend()
+    plt.show()
