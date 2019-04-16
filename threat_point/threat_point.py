@@ -255,17 +255,17 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
                                        total_payoffs_p1, frequency_pairs)
 
     # activate the FD function
-    if self.FD == True:
+    if self.FD:
         if self.FD_function_use == "FD":
-            FD = self.FD_function(draw_payoffs)
+            FD = self.FD_function(frequency_pairs)
         elif self.FD_function_use == "mu":
-            FD = self.mu_function(self.rho_function(draw_payoffs))
+            FD = self.mu_function(self.rho_function(frequency_pairs))
     else:
         FD = 1
 
     payoffs = np.sum(np.multiply(frequency_pairs, payoff_p1), axis=1)
 
-    if self.rarity == True:
+    if self.rarity:
         print("Plotting with rarity active")
         rho = self.rho_function(frequency_pairs)
         mu = self.mu_function(rho)
@@ -281,27 +281,14 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     max_payoffs_p1 = np.delete(max_payoffs, nan_delete[0], 0)  # actually delete them
     threat_point_p1 = np.nanmin(np.nanmax(max_payoffs_p1, axis=1))  # determine the threat point
 
-    location_threat = np.where(threat_point_p1 == max_payoffs_p1)
-
-    #         if self.rarity == True:
-    #             select_payoffs = np.multiply(self.profit_function(FD),select_payoffs)
-    #             select_payoffs = select_payoffs.reshape((select_payoffs.size,1))
-
-    #             second_sort = payoffs_sorted(points,select_payoffs,(actions_p1_game1*actions_p1_game2))
-
-    #             second_sort_p1 = np.delete(second_sort,nan_delete[0],0)
-    #             location_x = location_threat[0]
-    #             location_y = location_threat[1]
-    #             threat_point_p1 = (second_sort_p1[location_x,location_y])[0]
-
-    if print_text == True:
+    if print_text:
         print("")
         print("")
         print("Threat point value is", threat_point_p1)
         print("")
         print("")
 
-    if show_strat_p1 == True:
+    if show_strat_p1:
         threat_point_indices_p1 = np.where(max_payoffs_p1 == threat_point_p1)
         found_strategy_p1 = y_punisher[threat_point_indices_p1[0]]
         fnd_strategy_p1 = found_strategy_p1.flatten()
@@ -313,7 +300,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     end_time = time.time()  # stop the time!
 
-    if print_text == True:
+    if print_text:
         print("Seconds done to generate", points, "points", end_time - start_time)
         print("")
 
@@ -321,7 +308,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     # Start of algorithm player 2
 
-    if print_text == True:
+    if print_text:
         print("")
         print("")
         print("First start the threat point for player 2")
@@ -353,18 +340,18 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
                                        total_payoffs_p2, frequency_pairs)
 
     # activate FD function
-    if self.FD == True:
+    if self.FD:
         if self.FD_function_use == "FD":
-            FD = self.FD_function(draw_payoffs)
+            FD = self.FD_function(frequency_pairs)
         elif self.FD_function_use == "mu":
-            FD = self.mu_function(self.rho_function(draw_payoffs))
+            FD = self.mu_function(self.rho_function(frequency_pairs))
     else:
         FD = 1
 
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, payoff_p2), axis=1)
 
-    if self.rarity == True:
+    if self.rarity:
         rho = self.rho_function(frequency_pairs)
         mu = self.mu_function(rho)
         payoffs = np.multiply(self.profit_function(mu), payoffs)
@@ -379,14 +366,14 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     max_payoffs_p2 = np.delete(max_payoffs, nan_delete[0], 0)  # delete them where necessary
     threat_point_p2 = np.nanmin(np.nanmax(max_payoffs_p2, axis=1))  # determine the threat point
 
-    if print_text == True:
+    if print_text:
         print("")
         print("")
         print("Threat point value is", threat_point_p2)
         print("")
         print("")
 
-    if show_strat_p2 == True:
+    if show_strat_p2:
         threat_point_indices_p2 = np.where(max_payoffs_p2 == threat_point_p2)
         found_strategy = x_punisher[threat_point_indices_p2[0]]
         fnd_strategy = found_strategy.flatten()
@@ -398,7 +385,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     end_time_p2 = time.time()  # stop the time
 
-    if print_text == True:
+    if print_text:
         print("")
         print("Seconds done to generate", points, "points", end_time_p2 - start_time_p2)
         print("")
