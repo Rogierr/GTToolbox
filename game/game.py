@@ -30,6 +30,10 @@ class ETPGame:
 
         self.etp_matrix = matrixa
 
+        self.hysteresis = False
+        self.FD = False
+        self.plotting_rarity = False
+
         self.printing = False  # set printing to False
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])

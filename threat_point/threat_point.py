@@ -1,3 +1,6 @@
+import time
+import numpy as np
+
 def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text, FD_yn):
     "OPtimized threat point algorithm for ETP games"
 

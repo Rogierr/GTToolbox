@@ -1,3 +1,9 @@
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+from accelerators.aitken_delta_squared import aitken_delta_squared
+from scipy.spatial import ConvexHull
+
 def plot_all_rewards(self, points):
     print("Now plotting all rewards")
 
@@ -106,7 +112,7 @@ def plot_all_rewards(self, points):
                                                                                                   total_payoffs_p1_game1:total_payoffs_p1])
 
         if i == 10:
-            Q_new = self.aitken_delta_squared(Q[:, i - 3], Q[:, i - 2], Q[:, i - 1])
+            Q_new = aitken_delta_squared(Q[:, i - 3], Q[:, i - 2], Q[:, i - 1])
             nan_org = np.where(np.isnan(Q_new))
             nan_indic = nan_org[0]
             Q_new[nan_indic, :] = Q_between[nan_indic, :]
@@ -115,7 +121,7 @@ def plot_all_rewards(self, points):
             Q = np.hstack((Q, Q_new))
 
         if i > 10:
-            Q_new[index_values, :] = self.aitken_delta_squared(Q[index_values, i - 3], Q[index_values, i - 2],
+            Q_new[index_values, :] = aitken_delta_squared(Q[index_values, i - 3], Q[index_values, i - 2],
                                                                Q[index_values, i - 1])
             Q_old2 = np.copy(Q_old)
             nan_res = np.where(np.isnan(Q_new, Q_old))
@@ -185,8 +191,10 @@ def plot_all_rewards(self, points):
     all_payoffs = np.transpose(all_payoffs)
     Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
+    plt.figure()
     plt.scatter(payoffs_p1, payoffs_p2)
     #         plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
+    plt.show()
 
     end_time = time.time()
 
