@@ -1,3 +1,5 @@
+import numpy as np
+
 def payoffs_sorted(points, payoffs, actions):
     "This function sorts the payoffs in order to prepare the threat point"
 

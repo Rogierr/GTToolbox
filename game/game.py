@@ -1,12 +1,12 @@
 import numpy as np
-from plotting import plot_convex_hull_pure_rewards as plt_conv
+
 
 class ETPGame:
-    "The ETP Game class represents the Type III games from the thesis, with or without ESP."
+    """The ETP Game class represents the Type III games from the thesis, with or without ESP."""
 
     def __init__(self, payoff_p1_game1, payoff_p2_game1, payoff_p1_game2, payoff_p2_game2, trmatrixg1, trmatrixg2,
                  trmatrixg3, trmatrixg4, matrixa):
-        "Here below we initialize the game by storing payoff and transition matrices according to the upper input."
+        """Here below we initialize the game by storing payoff and transition matrices according to the upper input."""
 
         # here below we just store some values that are being put in
         self.payoff_p1_game1 = payoff_p1_game1  # payoff p1 in game 1
@@ -29,16 +29,21 @@ class ETPGame:
         self.payoff_p1_g2_flat = self.payoff_p1_game2.A1  # store the flatten payoff of p1 game 2
         self.payoff_p2_g2_flat = self.payoff_p2_game2.A1  # store the flatten payoff of p2 game 2
 
-        self.payoff_p1_actions = self.payoff_p1_g1_flat.size + self.payoff_p1_g2_flat.size
-        self.payoff_p2_actions = self.payoff_p2_g1_flat.size + self.payoff_p2_g2_flat.size
+        self.payoff_p1_size = self.payoff_p1_g1_flat.size + self.payoff_p1_g2_flat.size
+        self.payoff_p2_size = self.payoff_p2_g1_flat.size + self.payoff_p2_g2_flat.size
 
-        self.payoff_p1 = np.zeros(self.payoff_p1_actions)
+        self.total_payoffs = self.payoff_p1_game1.size + self.payoff_p2_game2.size
+
+        self.payoff_p1_actions = self.payoff_p1_game1.shape[0] + self.payoff_p1_game2.shape[0]
+        self.payoff_p2_actions = self.payoff_p2_game1.shape[1] + self.payoff_p2_game2.shape[1]
+
+        self.payoff_p1 = np.zeros(self.payoff_p1_size)
         self.payoff_p1[0:self.payoff_p1_g1_flat.size] = self.payoff_p1_g1_flat
-        self.payoff_p1[self.payoff_p1_g1_flat.size:self.payoff_p1_actions] = self.payoff_p1_g2_flat
+        self.payoff_p1[self.payoff_p1_g1_flat.size:self.payoff_p1_size] = self.payoff_p1_g2_flat
 
-        self.payoff_p2 = np.zeros(self.payoff_p2_actions)
+        self.payoff_p2 = np.zeros(self.payoff_p2_size)
         self.payoff_p2[0:self.payoff_p2_g1_flat.size] = self.payoff_p2_g1_flat
-        self.payoff_p2[self.payoff_p2_g1_flat.size:self.payoff_p2_actions] = self.payoff_p2_g2_flat
+        self.payoff_p2[self.payoff_p2_g1_flat.size:self.payoff_p2_size] = self.payoff_p2_g2_flat
 
         self.trans_matr_game1_to1_flat = self.transition_matrix_game1_to1.flatten()     # flattened trans matrices
         self.trans_matr_game2_to1_flat = self.transition_matrix_game2_to1.flatten()

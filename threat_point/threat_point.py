@@ -1,7 +1,13 @@
 import time
 import numpy as np
 
+from computation.balance_equation import balance_equation
+from computation.frequency_pairs_p1 import frequency_pairs_p1
+from computation.frequency_pairs_p2 import frequency_pairs_p2
+from computation.payoffs_sorted import payoffs_sorted
 from computation.random_strategy_draw import random_strategy_draw
+
+from FD_functions.fd_function import fd_function
 
 
 def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text):
@@ -11,58 +17,26 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         print("The start of the algorithm for finding the threat point")
         print("First let's find the threat point for Player 1")
 
-    # flatten the transition matrices
-    flatten1_1 = self.transition_matrix_game1_to1.flatten()
-    flatten2_1 = self.transition_matrix_game2_to1.flatten()
-
-    #  store the actions for both players
-    actions_p2_game1 = self.payoff_p1_game1.shape[1]
-    actions_p2_game2 = self.payoff_p1_game2.shape[1]
-    total_actions_p2 = actions_p2_game1 + actions_p2_game2
-
-    actions_p1_game1 = self.payoff_p1_game1.shape[0]
-    actions_p1_game2 = self.payoff_p1_game2.shape[0]
-    total_actions_p1 = actions_p1_game1 + actions_p1_game2
-
-    # Start of algorithm for player 1
-
     start_time = time.time()  # timer start
 
-    # flatten payoffs game 1 and 2
-    payoff_p1_game_1flatten = self.payoff_p1_game1.flatten()
-    payoff_p1_game_2flatten = self.payoff_p1_game2.flatten()
+    y_punisher = random_strategy_draw(points, self.payoff_p2_actions)  # draw strategies for the punisher
 
-    # store size of the payoffs
-    total_payoffs_p1_game1 = payoff_p1_game_1flatten.size
-    total_payoffs_p1_game2 = payoff_p1_game_2flatten.size
-    total_payoffs_p1 = total_payoffs_p1_game1 + total_payoffs_p1_game2
-
-    # initialize and assign payoffs
-    payoff_p1 = np.zeros(total_payoffs_p1)
-    payoff_p1[0:total_payoffs_p1_game1] = payoff_p1_game_1flatten
-    payoff_p1[total_payoffs_p1_game1:total_payoffs_p1] = payoff_p1_game_2flatten
-
-    px = np.concatenate([flatten1_1, flatten2_1], axis=1)  # store px
-
-    y_punisher = random_strategy_draw(points, total_actions_p2)  # draw strategies for the punisher
-
-    frequency_pairs = frequency_pairs_p1(points, total_actions_p2, total_actions_p1,
-                                         y_punisher)  # sort based on best reply
+    frequency_pairs = frequency_pairs_p1(self, points, y_punisher)  # sort based on best reply
 
     # do the balance equations calculations
-    frequency_pairs = balance_equation(self, actions_p1_game1, actions_p1_game2, total_payoffs_p1_game1,
-                                       total_payoffs_p1, frequency_pairs)
+    frequency_pairs = balance_equation(self, points, self.payoff_p1_game1.shape[0], self.payoff_p1_game2.shape[0],
+                                       self.payoff_p1_game1.size, self.total_payoffs, frequency_pairs)
+
+    fd = 1
 
     # activate the FD function
     if self.FD:
         if self.FD_function_use == "FD":
-            FD = self.FD_function(frequency_pairs)
+            fd = fd_function(frequency_pairs)
         elif self.FD_function_use == "mu":
-            FD = self.mu_function(self.rho_function(frequency_pairs))
-    else:
-        FD = 1
+            fd = self.mu_function(self.rho_function(frequency_pairs))
 
-    payoffs = np.sum(np.multiply(frequency_pairs, payoff_p1), axis=1)
+    payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
 
     if self.rarity:
         print("Plotting with rarity active")
@@ -71,10 +45,11 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         payoffs = np.multiply(self.profit_function(mu), payoffs)
     else:
         # compute the payoffs with payoffs and FD function
-        payoffs = np.multiply(FD, payoffs)
+        payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    max_payoffs = payoffs_sorted(points, payoffs, (actions_p1_game1 * actions_p1_game2))  # sort the payoffs
+    max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p1_game1.shape[0] * self.payoff_p1_game2.shape[0]))
+    # sort the payoffs
     nan_delete = np.where(np.isnan(max_payoffs))  # delete payoffs which are a NaN
 
     max_payoffs_p1 = np.delete(max_payoffs, nan_delete[0], 0)  # actually delete them
@@ -113,42 +88,26 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         print("First start the threat point for player 2")
     start_time_p2 = time.time()  # start the time (for p2)
 
-    # flatten the payoffs of the gamew
-    payoff_p2_game_1flatten = self.payoff_p2_game1.flatten()
-    payoff_p2_game_2flatten = self.payoff_p2_game2.flatten()
+    x_punisher = random_strategy_draw(points, self.payoff_p1_actions)  # draw some awesome strategies
 
-    # check the sizes of the total payoffs
-    total_payoffs_p2_game1 = payoff_p2_game_1flatten.size
-    total_payoffs_p2_game2 = payoff_p2_game_2flatten.size
-    total_payoffs_p2 = total_payoffs_p2_game1 + total_payoffs_p2_game2
-
-    # initialize the payoffs for p2 and assign them
-    payoff_p2 = np.zeros(total_payoffs_p2)
-    payoff_p2[0:total_payoffs_p2_game1] = payoff_p2_game_1flatten
-    payoff_p2[total_payoffs_p2_game1:total_payoffs_p2] = payoff_p2_game_2flatten
-
-    px = np.concatenate([flatten1_1, flatten2_1], axis=1)  # trix with px
-
-    x_punisher = random_strategy_draw(points, total_actions_p1)  # draw some awesome strategies
-
-    frequency_pairs = frequency_pairs_p2(points, total_actions_p2, total_actions_p1,
+    frequency_pairs = frequency_pairs_p2(self, points, self.payoff_p2_actions, self.payoff_p1_actions,
                                          x_punisher)  # sort them based on best replies
 
     # do some balance equation accelerator magic
-    frequency_pairs = balance_equation(self, actions_p2_game1, actions_p2_game2, total_payoffs_p2_game1,
-                                       total_payoffs_p2, frequency_pairs)
+    frequency_pairs = balance_equation(self, points, self.payoff_p2_game1.shape[1], self.payoff_p2_game2.shape[1],
+                                       self.payoff_p2_game1.size, self.total_payoffs, frequency_pairs)
+
+    fd = 1
 
     # activate FD function
     if self.FD:
         if self.FD_function_use == "FD":
-            FD = self.FD_function(frequency_pairs)
+            fd = fd_function(frequency_pairs)
         elif self.FD_function_use == "mu":
-            FD = self.mu_function(self.rho_function(frequency_pairs))
-    else:
-        FD = 1
+            fd = self.mu_function(self.rho_function(frequency_pairs))
 
         # payoffs are calculated
-    payoffs = np.sum(np.multiply(frequency_pairs, payoff_p2), axis=1)
+    payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)
 
     if self.rarity:
         rho = self.rho_function(frequency_pairs)
@@ -156,10 +115,11 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         payoffs = np.multiply(self.profit_function(mu), payoffs)
     else:
         # compute the payoffs with payoffs and FD function
-        payoffs = np.multiply(FD, payoffs)
+        payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    max_payoffs = payoffs_sorted(points, payoffs, (actions_p2_game1 * actions_p2_game2))  # awesome sorting process
+    max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p2_game1.shape[1] * self.payoff_p2_game2.shape[1]))
+    # awesome sorting process
     nan_delete = np.where(np.isnan(max_payoffs))  # look for NaN's
 
     max_payoffs_p2 = np.delete(max_payoffs, nan_delete[0], 0)  # delete them where necessary

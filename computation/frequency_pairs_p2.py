@@ -1,4 +1,6 @@
-def frequency_pairs_p2(points, p2_actions, p1_actions, strategies_drawn):
+import numpy as np
+
+def frequency_pairs_p2(self, points, p2_actions, p1_actions, strategies_drawn):
     "Create frequency pairs for P2 based on best responses"
 
     # store the size of the games
@@ -23,6 +25,7 @@ def frequency_pairs_p2(points, p2_actions, p1_actions, strategies_drawn):
         for j in np.nditer(p2_action_range):
             modul = np.mod(j, p2_actions_game1)
             frequency_pairs[j * points:(j + 1) * points, p2_actions_game1 * i + modul] = strategies_drawn[:, i]
+
     # loop over the second game
     for i in np.nditer(np.arange(p2_actions_game2)):
         for j in np.nditer(p2_action_range):

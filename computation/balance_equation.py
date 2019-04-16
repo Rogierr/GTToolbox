@@ -1,4 +1,8 @@
-def balance_equation(self, tot_act_ut, tot_act_thr, tot_payoffs_game1, tot_payoffs, frequency_pairs):
+import numpy as np
+
+from accelerators.aitken_delta_squared import aitken_delta_squared
+
+def balance_equation(self, points, tot_act_ut, tot_act_thr, tot_payoffs_game1, tot_payoffs, frequency_pairs):
     "Calculates the result of the balance equations in order to adjust the frequency pairs"
 
     # store the game sizes
@@ -19,7 +23,7 @@ def balance_equation(self, tot_act_ut, tot_act_thr, tot_payoffs_game1, tot_payof
 
     index_values = np.arange(points * (tot_act_thr * tot_act_ut))  # create a range of index values
 
-    p1_px_between = np.asarray(px)  # set px
+    p1_px_between = np.asarray(self.px)  # set px
     p1_px = p1_px_between[0]
 
     if self.hysteresis == True:
