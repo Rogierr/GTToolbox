@@ -25,6 +25,18 @@ class ETPGame:
         self.payoff_p1_g2_flat = self.payoff_p1_game2.A1  # store the flatten payoff of p1 game 2
         self.payoff_p2_g2_flat = self.payoff_p2_game2.A1  # store the flatten payoff of p2 game 2
 
+        self.payoff_p1_actions = self.payoff_p1_g1_flat.size + self.payoff_p1_g2_flat.size
+        self.payoff_p2_actions = self.payoff_p2_g1_flat.size + self.payoff_p2_g2_flat.size
+
+        self.trans_matr_game1_to1_flat = self.transition_matrix_game1_to1.flatten()     # flattened trans matrices
+        self.trans_matr_game2_to1_flat = self.transition_matrix_game2_to1.flatten()
+
+        self.trans_matr_game1_to2_flat = self.transition_matrix_game1_to2.flatten()
+        self.trans_matr_game2_to2_flat = self.transition_matrix_game2_to2.flatten()
+
+        # here below we create px
+        self.px = np.concatenate([self.trans_matr_game1_to1_flat, self.trans_matr_game2_to1_flat], axis=1)
+
         self.payoff_p1_merged = np.concatenate((self.payoff_p1_g1_flat, self.payoff_p1_g2_flat))  # merge p1 payoffs
         self.payoff_p2_merged = np.concatenate((self.payoff_p2_g1_flat, self.payoff_p2_g2_flat))  # merge p2 payoffs
 
@@ -33,6 +45,7 @@ class ETPGame:
         self.hysteresis = False
         self.FD = False
         self.plotting_rarity = False
+        self.rarity = False
 
         self.printing = False  # set printing to False
 

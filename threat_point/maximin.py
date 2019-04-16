@@ -137,7 +137,7 @@ def optimized_maximin(self, points, show_strat_p1, show_strat_p2, FD_yn):
                 nan_res = np.where(np.isnan(Q_new, Q_old))  # check for NaN's
                 nan_indices = nan_res[0]  # look where NaN's are
 
-                # delete values which are NaN for future computations
+                # delete values which are NaN for future computation
                 nan_between = np.where(np.in1d(index_values, nan_indices))
                 nan_cands = nan_between[0]
                 index_values = np.delete(index_values, nan_cands)

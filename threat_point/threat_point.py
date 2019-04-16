@@ -1,17 +1,10 @@
 import time
 import numpy as np
+from accelerators.aitken_delta_squared import aitken_delta_squared
+from computation.random_strategy_draw import random_strategy_draw
 
 def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text, FD_yn):
-    "OPtimized threat point algorithm for ETP games"
-
-    def random_strategy_draw(points, number_of_actions):
-        "This function draws random strategies from a beta distribution, based on the number of points and actions"
-
-        # draw some strategies and normalize them
-        strategies_drawn = np.random.beta(0.5, 0.5, (points, number_of_actions))
-        strategies_drawn = strategies_drawn / np.sum(strategies_drawn, axis=1).reshape([points, 1])
-
-        return strategies_drawn
+    "Optimized threat point algorithm for ETP games"
 
     def frequency_pairs_p1(points, p2_actions, p1_actions, strategies_drawn):
         "This function sorts the strategies based on the responses"
@@ -123,7 +116,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
             # apply Aitken's
             if i == 10:
-                Q_new = self.aitken_delta_squared(Q[:, i - 3], Q[:, i - 2], Q[:, i - 1])
+                Q_new = aitken_delta_squared(Q[:, i - 3], Q[:, i - 2], Q[:, i - 1])
                 nan_org = np.where(np.isnan(Q_new))  # check whether Nan's occur
                 nan_indic = nan_org[0]
 
@@ -135,7 +128,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
             # and only Aitken's
             if i > 10:
-                Q_new[index_values, :] = self.aitken_delta_squared(Q[index_values, i - 3], Q[index_values, i - 2],
+                Q_new[index_values, :] = aitken_delta_squared(Q[index_values, i - 3], Q[index_values, i - 2],
                                                                    Q[index_values, i - 1])
                 Q_old2 = np.copy(Q_old)
                 nan_res = np.where(np.isnan(Q_new, Q_old))  # check for NaN's
@@ -385,19 +378,6 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     max_payoffs_p2 = np.delete(max_payoffs, nan_delete[0], 0)  # delete them where necessary
     threat_point_p2 = np.nanmin(np.nanmax(max_payoffs_p2, axis=1))  # determine the threat point
-
-    location_threat_p2 = np.where(threat_point_p2 == max_payoffs_p2)
-
-    #         if self.rarity == True:
-    #             select_payoffs_p2 = np.multiply(self.profit_function(FD),select_payoffs_p2)
-    #             select_payoffs_p2 = select_payoffs_p2.reshape((select_payoffs_p2.size,1))
-
-    #             second_sort_p2 = payoffs_sorted(points,select_payoffs_p2,(actions_p2_game1*actions_p2_game2))
-
-    #             second_sort_p2 = np.delete(second_sort_p2,nan_delete[0],0)
-    #             location_x = location_threat_p2[0]
-    #             location_y = location_threat_p2[1]
-    #             threat_point_p2 = (second_sort_p2[location_x,location_y])[0]
 
     if print_text == True:
         print("")

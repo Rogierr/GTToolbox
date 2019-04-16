@@ -1,61 +1,44 @@
+# General packages
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+
+# GTToolbox functions
 from accelerators.aitken_delta_squared import aitken_delta_squared
+from computation.random_strategy_draw import random_strategy_draw
 from scipy.spatial import ConvexHull
+
 
 def plot_all_rewards(self, points):
     print("Now plotting all rewards")
 
-    start_time = time.time()
-
-    # flatten the transition matrices
-    flatten1_1 = self.transition_matrix_game1_to1.flatten()
-    flatten2_1 = self.transition_matrix_game2_to1.flatten()
-
-    #  store the actions for both players
-    actions_p2_game1 = self.payoff_p1_game1.shape[1]
-    actions_p2_game2 = self.payoff_p1_game2.shape[1]
-    total_actions_p2 = actions_p2_game1 + actions_p2_game2
-
-    actions_p1_game1 = self.payoff_p1_game1.shape[0]
-    actions_p1_game2 = self.payoff_p1_game2.shape[0]
-    total_actions_p1 = actions_p1_game1 + actions_p1_game2
+    ### BEGINNING SECTION 1 ###
 
     start_time = time.time()  # timer start
 
-    # flatten payoffs game 1 and 2
-    payoff_p1_game_1flatten = self.payoff_p1_game1.flatten()
-    payoff_p1_game_2flatten = self.payoff_p1_game2.flatten()
-
-    payoff_p2_game_1flatten = self.payoff_p2_game1.flatten()
-    payoff_p2_game_2flatten = self.payoff_p2_game2.flatten()
-
     # store size of the payoffs
-    total_payoffs_p1_game1 = payoff_p1_game_1flatten.size
-    total_payoffs_p1_game2 = payoff_p1_game_2flatten.size
+    total_payoffs_p1_game1 = self.payoff_p1_g2_flat.size
+    total_payoffs_p1_game2 = self.payoff_p1_g2_flat.size
     total_payoffs_p1 = total_payoffs_p1_game1 + total_payoffs_p1_game2
 
     # initialize and assign payoffs
-    payoff_p1 = np.zeros(total_payoffs_p1)
-    payoff_p1[0:total_payoffs_p1_game1] = payoff_p1_game_1flatten
-    payoff_p1[total_payoffs_p1_game1:total_payoffs_p1] = payoff_p1_game_2flatten
+    payoff_p1 = np.zeros(self.payoff_p1_actions)
+    payoff_p1[0:total_payoffs_p1_game1] = self.payoff_p1_g1_flat
+    payoff_p1[total_payoffs_p1_game1:self.payoff_p1_actions] = self.payoff_p1_g2_flat
 
-    payoff_p2 = np.zeros(total_payoffs_p1)
-    payoff_p2[0:total_payoffs_p1_game1] = payoff_p2_game_1flatten
-    payoff_p2[total_payoffs_p1_game1:total_payoffs_p1] = payoff_p2_game_2flatten
+    payoff_p2 = np.zeros(self.payoff_p2_actions)
+    payoff_p2[0:total_payoffs_p1_game1] = self.payoff_p2_g1_flat
+    payoff_p2[total_payoffs_p1_game1:self.payoff_p2_actions] = self.payoff_p2_g2_flat
 
-    px = np.concatenate([flatten1_1, flatten2_1], axis=1)  # store px
+    ### END OF SECTION 1 ###
 
-    ## Build a draw function
+    ### BEGINNING OF SECTION 2 ###
 
-    draw_payoffs = np.zeros((points, total_payoffs_p1))
-    draw_payoffs = np.random.beta(0.5, 0.5, (points, total_payoffs_p1))
-    draw_payoffs = draw_payoffs / np.sum(draw_payoffs, axis=1).reshape([points, 1])
+    draw_payoffs = random_strategy_draw(points, self.payoff_p1_actions)   # draw some payoffs
 
     ## Calculate the balance equations
 
-    yi = np.zeros((points, total_payoffs_p1))
+    yi = np.zeros((points, self.payoff_p1_actions))
     Q = np.zeros((1, points))
     Q_new = np.zeros((1, points))
 
@@ -67,10 +50,10 @@ def plot_all_rewards(self, points):
 
     index_values = np.arange(points)
 
-    p1_px_between = np.asarray(px)
+    p1_px_between = np.asarray(self.px)
     p1_px = p1_px_between[0]
 
-    if self.hysteresis == True:
+    if self.hysteresis:
         etp_calculation = np.multiply(self.phi, self.etp_matrix)
     else:
         etp_calculation = self.etp_matrix
@@ -147,8 +130,12 @@ def plot_all_rewards(self, points):
     draw_payoffs[:, total_payoffs_p1_game1:total_payoffs_p1] = np.multiply((1 - Q[:, 34]), yi[:,
                                                                                            total_payoffs_p1_game1:total_payoffs_p1])
 
+    ### END SECTION 2 ###
+
+    ### BEGINNING SECTION 3 ###
+
     # activate the FD function
-    if self.FD == True:
+    if self.FD:
         if self.FD_function_use == "FD":
             FD = self.FD_function(draw_payoffs)
         elif self.FD_function_use == "mu":
@@ -193,9 +180,12 @@ def plot_all_rewards(self, points):
 
     plt.figure()
     plt.scatter(payoffs_p1, payoffs_p2)
-    #         plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
+    # plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y',
+    # zorder=5, label="Obtainable rewards")
     plt.show()
 
     end_time = time.time()
 
     print("Total time taken to plot all reward points:", end_time - start_time)
+
+    ### END SECTION 3 ###
