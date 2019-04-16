@@ -3,15 +3,6 @@ def optimized_maximin(self, points, show_strat_p1, show_strat_p2, FD_yn):
 
     print("Start of the maximin algorithm")
 
-    def random_strategy_draw(points, number_of_actions):
-        "This function draws random strategies from a beta distribution, based on the number of points and actions"
-
-        # draw some strategies and normalize them
-        strategies_drawn = np.random.beta(0.5, 0.5, (points, number_of_actions))
-        strategies_drawn = strategies_drawn / np.sum(strategies_drawn, axis=1).reshape([points, 1])
-
-        return strategies_drawn
-
     def frequency_pairs_p1(points, p2_actions, p1_actions, strategies_drawn):
         "Create strategies based on the best replies for player 1"
 
