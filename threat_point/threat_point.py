@@ -16,6 +16,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     if print_text:
         print("The start of the algorithm for finding the threat point")
         print("First let's find the threat point for Player 1")
+        print("")
 
     start_time = time.time()  # timer start
 
