@@ -36,6 +36,7 @@ class ETPGame:
 
         self.payoff_p1_actions = self.payoff_p1_game1.shape[0] + self.payoff_p1_game2.shape[0]
         self.payoff_p2_actions = self.payoff_p2_game1.shape[1] + self.payoff_p2_game2.shape[1]
+        self.total_actions = self.payoff_p1_actions + self.payoff_p2_actions
 
         self.payoff_p1 = np.zeros(self.payoff_p1_size)
         self.payoff_p1[0:self.payoff_p1_g1_flat.size] = self.payoff_p1_g1_flat

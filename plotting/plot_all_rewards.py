@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from accelerators.aitken_delta_squared import aitken_delta_squared
+from FD_functions.fd_function import fd_function
 
 def plot_all_rewards(self, points):
     print("Now plotting all rewards")
@@ -147,9 +148,9 @@ def plot_all_rewards(self, points):
                                                                                            total_payoffs_p1_game1:total_payoffs_p1])
 
     # activate the FD function
-    if self.FD == True:
+    if self.FD:
         if self.FD_function_use == "FD":
-            FD = self.FD_function(draw_payoffs)
+            FD = fd_function(draw_payoffs)
         elif self.FD_function_use == "mu":
             FD = self.mu_function(self.rho_function(draw_payoffs))
     else:
