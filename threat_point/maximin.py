@@ -7,6 +7,8 @@ from computation.frequency_pairs_p2 import frequency_pairs_p2
 from computation.payoffs_sorted import payoffs_sorted
 from computation.random_strategy_draw import random_strategy_draw
 
+from FD_functions.fd_function import fd_function
+
 
 def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     """This is an optimized version for determining the maximin result"""
@@ -31,7 +33,7 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     # activate FD
     if game.FD:
         if game.FD_function_use == "FD":
-            fd = game.FD_function(frequency_pairs)
+            fd = fd_function(frequency_pairs)
         elif game.FD_function_use == "mu":
             fd = game.mu_function(game.rho_function(frequency_pairs))
 
@@ -85,7 +87,7 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     # activate FD function if necessary
     if game.FD:
         if game.FD_function_use == "FD":
-            fd = game.FD_function(frequency_pairs)
+            fd = fd_function(frequency_pairs)
         elif game.FD_function_use == "mu":
             fd = game.mu_function(game.rho_function(frequency_pairs))
     else:

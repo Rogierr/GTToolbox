@@ -1,15 +1,12 @@
 import numpy as np
 
+
 def frequency_pairs_p2(self, points, p2_actions, p1_actions, strategies_drawn):
     "Create frequency pairs for P2 based on best responses"
 
     # store the size of the games
     game_size_1 = self.payoff_p2_game1.size
     game_size_2 = self.payoff_p2_game2.size
-
-    # store the ranges of the actions of both players
-    p1_actions_range = np.arange(p1_actions)
-    p2_actions_range = np.arange(p2_actions)
 
     p2_actions_game1 = self.payoff_p2_game1.shape[1]
     p2_actions_game2 = self.payoff_p2_game2.shape[1]
