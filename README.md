@@ -2,9 +2,9 @@
 
 Welcome to the GTToolbox, an abbreviation of the full name "Game Theoretical Toolbox".
 
-This toolbox contains a multitude of algorithms, most of them are developed by Reinoud Joosten, Rogier Harmelink and Llea Samuel. For now, it is a work-in-progress. There is however some literature using/developing the algorithms from this Toolbox. 
+This toolbox contains a multitude of algorithms, most of them are developed by Reinoud Joosten, Rogier Harmelink and Llea Samuel. For now, it is a work-in-progress. There is however some literature using/developing the algorithms from this Toolbox:
 
-They are: On the computation of large sets of rewards in ETP-ESP-games with communicating states (https://research.utwente.nl/en/publications/on-the-computation-of-large-sets-of-rewards-in-etp-esp-games-with)
+On the computation of large sets of rewards in ETP-ESP-games with communicating states (https://research.utwente.nl/en/publications/on-the-computation-of-large-sets-of-rewards-in-etp-esp-games-with)
 
 On Stochastic Fishery Games with Endogenous Stage-Payoffs and Transition Probabilities
 (https://research.utwente.nl/en/publications/on-stochastic-fishery-games-with-endogenous-stage-payoffs-and-tra)
