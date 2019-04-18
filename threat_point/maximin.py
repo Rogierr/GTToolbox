@@ -8,6 +8,9 @@ from computation.payoffs_sorted import payoffs_sorted
 from computation.random_strategy_draw import random_strategy_draw
 
 from FD_functions.fd_function import fd_function
+from FD_functions.rho_function import rho_function
+from FD_functions.mu_function import mu_function
+from FD_functions.profit_function import profit_function
 
 
 def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
@@ -95,7 +98,7 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
 
     if game.rarity:
         payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
-        payoffs = np.multiply(game.revenue_function(fd), payoffs)
+        payoffs = np.multiply(profit_function(mu_function(rho_function(fd))), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function

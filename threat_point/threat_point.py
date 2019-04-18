@@ -31,10 +31,10 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     fd = 1
 
     # activate the FD function
-    if self.FD:
+    if self.FD or self.rarity:
         if self.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
-        elif self.FD_function_use == "mu":
+        elif self.rarity:
             fd = self.mu_function(self.rho_function(frequency_pairs))
 
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
@@ -104,7 +104,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     if self.FD:
         if self.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
-        elif self.FD_function_use == "mu":
+        elif self.rarity:
             fd = self.mu_function(self.rho_function(frequency_pairs))
 
         # payoffs are calculated

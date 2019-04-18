@@ -64,6 +64,7 @@ class ETPGame:
         # we just set some things to false a default initialization
         self.hysteresis = False
         self.FD = False
+        self.mu = False
         self.plotting_rarity = False
         self.rarity = False
         self.printing = False  # set printing to False
