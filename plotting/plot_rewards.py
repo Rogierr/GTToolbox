@@ -26,7 +26,7 @@ def plot_convex_hull_pure_rewards(game):
 
 
 def plot_single_period_pure_rewards(self):
-    "Here we plot the pure rewards possible for a single period"
+    """Here we plot the pure rewards possible for a single period"""
 
     plt.figure()  # create a figure
     payoff_p1_g1_flat = self.payoff_p1_game1.A1  # create a flattend payoff of p1 in game 1
@@ -45,7 +45,7 @@ def plot_single_period_pure_rewards(self):
     plt.legend()
     plt.show()
 
-    
+
 def plot_all_rewards(self, points):
     print("Now plotting all rewards")
 
@@ -67,8 +67,6 @@ def plot_all_rewards(self, points):
     if self.FD or self.rarity:
         if self.FD:
             fd = fd_function(draw_payoffs)
-        elif self.mu:
-            print("Placeholder")
         elif self.rarity:
             fd = mu_function(self, rho_function(draw_payoffs))
 
@@ -79,20 +77,14 @@ def plot_all_rewards(self, points):
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
         print("Plotting with rarity active")
-        rho = rho_function(draw_payoffs)
-        mu = mu_function(self, rho)
-        payoffs_p1 = np.multiply(profit_function(mu), payoffs_p1)
-        payoffs_p2 = np.multiply(profit_function(mu), payoffs_p2)
-    else:
+        payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
+        payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
+    elif self.FD:
         print("Normal plotting active")
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
 
     # here below we just randomly throw out some stuff
-
-    print(np.nanmax(payoffs_p1))
-    store = np.where(np.nanmax(payoffs_p1))
-    print(draw_payoffs[store[0],:])
 
     delete_indic = np.where(np.isnan(payoffs_p1))
     payoffs_p1 = np.delete(payoffs_p1, delete_indic[0], 0)
@@ -103,18 +95,19 @@ def plot_all_rewards(self, points):
 
     self.minimal_payoffs = np.zeros(2)
     self.minimal_payoffs = [np.min(payoffs_p1), np.min(payoffs_p2)]
-
-    all_payoffs = np.array([payoffs_p1, payoffs_p2])
-    all_payoffs = np.transpose(all_payoffs)
+    #
+    # all_payoffs = np.array([payoffs_p1, payoffs_p2])
+    # all_payoffs = np.transpose(all_payoffs)
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars with Hysteresis and Rarity Value")
+    plt.title("Small Fish Wars with Rarity Value")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
     #         plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
     end_time = time.time()
-    plt.show()
+    # plt.show()
 
     print("Total time taken to plot all reward points:", end_time - start_time)
+

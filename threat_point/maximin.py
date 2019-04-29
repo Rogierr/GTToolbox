@@ -39,7 +39,7 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
         if game.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
         elif game.FD_function_use == "mu":
-            fd = game.mu_function(game.rho_function(frequency_pairs))
+            fd = mu_function(game, rho_function(frequency_pairs))
 
     # calculate the payoffs
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p1), axis=1)
@@ -93,13 +93,13 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
         if game.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
         elif game.FD_function_use == "mu":
-            fd = game.mu_function(game.rho_function(frequency_pairs))
+            fd = mu_function(game, rho_function(frequency_pairs))
     else:
         fd = 1
 
     if game.rarity:
         payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
-        payoffs = np.multiply(profit_function(mu_function(rho_function(fd))), payoffs)
+        payoffs = np.multiply(profit_function(mu_function(game, rho_function(fd))), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function

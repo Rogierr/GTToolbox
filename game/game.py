@@ -121,7 +121,7 @@ class ETPGame:
         print("Mu adjusted, now has:")
         print("M = ", m)
 
-    def plotting_rarity(self, plot):
+    def plotting_rare(self, plot):
         if plot == "Rarity":
             self.plotting_rarity = plot
             self.m = 1

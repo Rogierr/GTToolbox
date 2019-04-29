@@ -8,6 +8,9 @@ from computation.payoffs_sorted import payoffs_sorted
 from computation.random_strategy_draw import random_strategy_draw
 
 from FD_functions.fd_function import fd_function
+from FD_functions.rho_function import rho_function
+from FD_functions.profit_function import profit_function
+from FD_functions.mu_function import mu_function
 
 
 __all__ = ['threat_point_optimized']
@@ -38,15 +41,15 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         if self.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
         elif self.rarity:
-            fd = self.mu_function(self.rho_function(frequency_pairs))
+            fd = mu_function(rho_function(frequency_pairs))
 
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
 
     if self.rarity:
         print("Plotting with rarity active")
-        rho = self.rho_function(frequency_pairs)
-        mu = self.mu_function(rho)
-        payoffs = np.multiply(self.profit_function(mu), payoffs)
+        rho = rho_function(frequency_pairs)
+        mu = mu_function(self, rho)
+        payoffs = np.multiply(profit_function(mu), payoffs)
     else:
         # compute the payoffs with payoffs and FD function
         payoffs = np.multiply(fd, payoffs)
@@ -108,15 +111,15 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         if self.FD_function_use == "FD":
             fd = fd_function(frequency_pairs)
         elif self.rarity:
-            fd = self.mu_function(self.rho_function(frequency_pairs))
+            fd = mu_function(self, rho_function(frequency_pairs))
 
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)
 
     if self.rarity:
-        rho = self.rho_function(frequency_pairs)
-        mu = self.mu_function(rho)
-        payoffs = np.multiply(self.profit_function(mu), payoffs)
+        rho = rho_function(frequency_pairs)
+        mu = mu_function(self, rho)
+        payoffs = np.multiply(profit_function(mu), payoffs)
     else:
         # compute the payoffs with payoffs and FD function
         payoffs = np.multiply(fd, payoffs)
