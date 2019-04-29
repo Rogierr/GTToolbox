@@ -1,4 +1,6 @@
 import numpy as np
+import plotting as gameplot
+import threat_point as tp
 
 
 class ETPGame:
@@ -74,6 +76,8 @@ class ETPGame:
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
+    # here below we have some game_options functions
+
     def activate_fd(self):
         print("Game is now an ESP game")
 
@@ -117,3 +121,39 @@ class ETPGame:
         print("Mu adjusted, now has:")
         print("M = ", m)
 
+    def plotting_rarity(self, plot):
+        if plot == "Rarity":
+            self.plotting_rarity = plot
+            self.m = 1
+        elif plot == "Revenue":
+            self.plotting_rarity = plot
+            self.m = 1
+        else:
+            self.plotting_rarity = False
+
+        print("Plotting rarity is now:", self.plotting_rarity)
+
+    # above this line we have some game options functions
+
+    # below this line we incorporate some functions within the class
+
+    def plot_all_rewards(self, points):
+        gameplot.plot_all_rewards(self, points)
+
+    def plot_convex_hull_pure_rewards(self):
+        gameplot.plot_convex_hull_pure_rewards(self)
+
+    def plot_single_period_pure_rewards(self):
+        gameplot.plot_single_period_pure_rewards(self)
+
+    def plot_threat_point(self):
+        gameplot.plot_threat_point(self)
+
+    def plot_threat_point_lines(self):
+        gameplot.plot_threat_point_lines(self)
+
+    def compute_maximin(self, points, show_p1, show_p2):
+        tp.optimized_maximin(self, points, show_p1, show_p2)
+
+    def compute_threat_point(self, points, show_p1, show_p2, print_text):
+        tp.threat_point_optimized(self, points, show_p1, show_p2, print_text)

@@ -10,6 +10,9 @@ from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
 
 
+__all__ = ['threat_point_optimized']
+
+
 def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text):
     """Optimized threat point algorithm for ETP games"""
 

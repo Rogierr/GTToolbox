@@ -12,6 +12,7 @@ from FD_functions.rho_function import rho_function
 from FD_functions.mu_function import mu_function
 from FD_functions.profit_function import profit_function
 
+__all__ = ['optimized_maximin']
 
 def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     """This is an optimized version for determining the maximin result"""
