@@ -64,10 +64,13 @@ class ETPGame:
         # we just set some things to false a default initialization
         self.hysteresis = False
         self.FD = False
+        self.FD_function_use = "FD"
         self.mu = False
         self.plotting_rarity = False
         self.rarity = False
         self.printing = False  # set printing to False
+        self.phi = 0
+        self.m = 0
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
@@ -75,15 +78,12 @@ class ETPGame:
         print("Game is now an ESP game")
 
         self.FD = True
-        self.FD_function_use = "FD"
-
 
     def activate_hysteresis(self, phi):
         print("Hysteresis is now active")
 
         self.hysteresis = True
         self.phi = phi
-
 
     def activate_rarity(self):
         print("Rarity function active")
@@ -103,3 +103,17 @@ class ETPGame:
         print("Rarity function deactivated")
 
         self.rarity = False
+
+    def adjust_fd(self, type_function):
+        if type_function == "mu":
+            self.FD_function_use = "mu"
+            self.m = 0
+        else:
+            self.FD_function_use = "FD"
+
+    def adjust_mu(self, m):
+        self.m = m
+
+        print("Mu adjusted, now has:")
+        print("M = ", m)
+

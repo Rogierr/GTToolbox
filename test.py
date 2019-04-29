@@ -4,7 +4,6 @@ from plotting.plot_all_rewards import plot_all_rewards
 from threat_point.maximin import optimized_maximin
 from threat_point.threat_point import threat_point_optimized
 from plotting.plotting_rarity import plotting_rarity
-from FD_functions.adjust_mu import adjust_mu
 
 p1_1 = np.matrix('16 14; 28 24')
 p2_1 = np.matrix('16 28; 14 24')
@@ -28,7 +27,7 @@ FirstTryETP = ETPGame(p1_1,p2_1,p1_2,p2_2,trans1_1,trans2_1,trans1_2,trans2_2,ma
 FirstTryETP.activate_rarity()
 plotting_rarity(FirstTryETP, "Rarity")
 # activate_hysteresis(FirstTryETP, 1.5)
-adjust_mu(FirstTryETP, 0.05)
+FirstTryETP.adjust_mu(0.05)
 
 plot_all_rewards(FirstTryETP, 10000000)
 
