@@ -2,6 +2,7 @@ import numpy as np
 
 from accelerators.aitken_delta_squared import aitken_delta_squared
 
+
 def balance_equation(self, points, tot_act_ut, tot_act_thr, tot_payoffs_game1, tot_payoffs, frequency_pairs):
     "Calculates the result of the balance equations in order to adjust the frequency pairs"
 
@@ -26,7 +27,7 @@ def balance_equation(self, points, tot_act_ut, tot_act_thr, tot_payoffs_game1, t
     p1_px_between = np.asarray(self.px)  # set px
     p1_px = p1_px_between[0]
 
-    if self.hysteresis == True:
+    if self.hysteresis:
         etp_calculation = np.multiply(self.phi, self.etp_matrix)
     else:
         etp_calculation = self.etp_matrix
@@ -37,6 +38,8 @@ def balance_equation(self, points, tot_act_ut, tot_act_thr, tot_payoffs_game1, t
         # first iteration, just calculate Q
         if i == 0:
             new_x = p1_px - np.dot(frequency_pairs, etp_calculation)
+            np.place(new_x, new_x < 0, 0)
+            np.place(new_x, new_x > 1, 1)
 
             upper_part_Q = np.sum(
                 np.multiply(yi[:, tot_payoffs_game1:tot_payoffs], new_x[:, tot_payoffs_game1:tot_payoffs]),
@@ -55,8 +58,10 @@ def balance_equation(self, points, tot_act_ut, tot_act_thr, tot_payoffs_game1, t
                                                                                      tot_payoffs_game1:tot_payoffs])
 
         # for stability, calculate until iteration 9 normal Q
-        if i > 0 and i < 10:
+        if i < 10:
             new_x = p1_px - np.dot(frequency_pairs, etp_calculation)
+            np.place(new_x, new_x < 0, 0)
+            np.place(new_x, new_x > 1, 1)
 
             upper_part_Q = np.sum(
                 np.multiply(yi[:, tot_payoffs_game1:tot_payoffs], new_x[:, tot_payoffs_game1:tot_payoffs]),

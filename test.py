@@ -22,9 +22,9 @@ ETP = ETPGame(p1_1,p2_1,p1_2,p2_2,trans1_1,trans2_1,trans1_2,trans2_2,matrixC)
 
 ETP.activate_rarity()
 ETP.plotting_rare("Rarity")
-# activate_hysteresis(FirstTryETP, 1.5)
+ETP.activate_hysteresis(2.5)
 ETP.adjust_mu(0.05)
-ETP.plot_all_rewards(5000000)
+ETP.plot_all_rewards(1000000)
 
 
 # ETP.compute_maximin(10, True, True)

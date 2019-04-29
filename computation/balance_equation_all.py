@@ -21,6 +21,7 @@ def balance_equation_all(self, points, draw_payoffs):
 
     if self.hysteresis:
         etp_calculation = np.multiply(self.phi, self.etp_matrix)
+
     else:
         etp_calculation = self.etp_matrix
 
@@ -28,6 +29,8 @@ def balance_equation_all(self, points, draw_payoffs):
 
         if i == 0:
             new_x = p1_px - np.dot(draw_payoffs, etp_calculation)
+            np.place(new_x, new_x < 0, 0)
+            np.place(new_x, new_x > 1, 1)
 
             upper_part_Q = np.sum(np.multiply(yi[:, self.payoff_p1_game1.size:self.total_payoffs],
                                               new_x[:, self.payoff_p1_game1.size:self.total_payoffs]), axis=1)
@@ -45,6 +48,8 @@ def balance_equation_all(self, points, draw_payoffs):
 
         if i < 10:
             new_x = p1_px - np.dot(draw_payoffs, etp_calculation)
+            np.place(new_x, new_x < 0, 0)
+            np.place(new_x, new_x > 1, 1)
 
             upper_part_Q = np.sum(np.multiply(yi[:, self.payoff_p1_game1.size:self.total_payoffs],
                                               new_x[:, self.payoff_p1_game1.size:self.total_payoffs]), axis=1)

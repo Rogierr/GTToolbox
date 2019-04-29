@@ -1,5 +1,5 @@
 import numpy as np
-import plotting as gameplot
+import plotting as game_plot
 import threat_point as tp
 
 
@@ -138,19 +138,19 @@ class ETPGame:
     # below this line we incorporate some functions within the class
 
     def plot_all_rewards(self, points):
-        gameplot.plot_all_rewards(self, points)
+        game_plot.plot_all_rewards(self, points)
 
     def plot_convex_hull_pure_rewards(self):
-        gameplot.plot_convex_hull_pure_rewards(self)
+        game_plot.plot_convex_hull_pure_rewards(self)
 
     def plot_single_period_pure_rewards(self):
-        gameplot.plot_single_period_pure_rewards(self)
+        game_plot.plot_single_period_pure_rewards(self)
 
     def plot_threat_point(self):
-        gameplot.plot_threat_point(self)
+        game_plot.plot_threat_point(self)
 
     def plot_threat_point_lines(self):
-        gameplot.plot_threat_point_lines(self)
+        game_plot.plot_threat_point_lines(self)
 
     def compute_maximin(self, points, show_p1, show_p2):
         tp.optimized_maximin(self, points, show_p1, show_p2)
