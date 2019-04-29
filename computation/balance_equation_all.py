@@ -2,6 +2,7 @@ import numpy as np
 
 from accelerators.aitken_delta_squared import aitken_delta_squared
 
+
 def balance_equation_all(self, points, draw_payoffs):
 
     yi = np.zeros((points, self.total_payoffs))

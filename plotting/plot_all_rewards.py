@@ -10,6 +10,7 @@ from FD_functions.mu_function import mu_function
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
 
+
 def plot_all_rewards(self, points):
     print("Now plotting all rewards")
 
@@ -54,6 +55,10 @@ def plot_all_rewards(self, points):
 
     # here below we just randomly throw out some stuff
 
+    print(np.nanmax(payoffs_p1))
+    store = np.where(np.nanmax(payoffs_p1))
+    print(draw_payoffs[store[0],:])
+
     delete_indic = np.where(np.isnan(payoffs_p1))
     payoffs_p1 = np.delete(payoffs_p1, delete_indic[0], 0)
     payoffs_p2 = np.delete(payoffs_p2, delete_indic[0], 0)
@@ -68,6 +73,10 @@ def plot_all_rewards(self, points):
     all_payoffs = np.transpose(all_payoffs)
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
+    plt.figure()
+    plt.title("Small Fish Wars with Hysteresis and Rarity Value")
+    plt.xlabel("Rewards player 1")
+    plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
     #         plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
     end_time = time.time()
