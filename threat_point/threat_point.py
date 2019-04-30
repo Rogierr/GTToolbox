@@ -38,18 +38,18 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     # activate the FD function
     if self.FD or self.rarity:
-        if self.FD_function_use == "FD":
+        if self.FD:
             fd = fd_function(frequency_pairs)
         elif self.rarity:
-            fd = mu_function(rho_function(frequency_pairs))
+            fd = mu_function(self, rho_function(frequency_pairs))
 
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
 
     if self.rarity:
         print("Plotting with rarity active")
-        rho = rho_function(frequency_pairs)
-        mu = mu_function(self, rho)
-        payoffs = np.multiply(profit_function(mu), payoffs)
+        payoffs = np.multiply(fd, payoffs)
+        payoffs = np.multiply(profit_function(fd), payoffs)
+        payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
         payoffs = np.multiply(fd, payoffs)
@@ -107,8 +107,8 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     fd = 1
 
     # activate FD function
-    if self.FD:
-        if self.FD_function_use == "FD":
+    if self.FD or self.rarity:
+        if self.FD:
             fd = fd_function(frequency_pairs)
         elif self.rarity:
             fd = mu_function(self, rho_function(frequency_pairs))
@@ -117,9 +117,9 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)
 
     if self.rarity:
-        rho = rho_function(frequency_pairs)
-        mu = mu_function(self, rho)
-        payoffs = np.multiply(profit_function(mu), payoffs)
+        payoffs = np.multiply(fd, payoffs)
+        payoffs = np.multiply(profit_function(fd), payoffs)
+        payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
         payoffs = np.multiply(fd, payoffs)

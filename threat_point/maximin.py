@@ -14,6 +14,7 @@ from FD_functions.profit_function import profit_function
 
 __all__ = ['optimized_maximin']
 
+
 def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     """This is an optimized version for determining the maximin result"""
 
@@ -35,16 +36,24 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     fd = 1
 
     # activate FD
-    if game.FD:
-        if game.FD_function_use == "FD":
+    if game.FD or game.rarity:
+        if game.FD:
             fd = fd_function(frequency_pairs)
-        elif game.FD_function_use == "mu":
+        elif game.rarity:
             fd = mu_function(game, rho_function(frequency_pairs))
 
-    # calculate the payoffs
+        # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p1), axis=1)
-    payoffs = np.multiply(fd, payoffs)
-    payoffs = payoffs.reshape((payoffs.size, 1))
+
+    if game.rarity:
+        print("Plotting with rarity active")
+        payoffs = np.multiply(fd, payoffs)
+        payoffs = np.multiply(profit_function(fd), payoffs)
+        payoffs = payoffs.reshape((payoffs.size, 1))
+    else:
+        # compute the payoffs with payoffs and FD function
+        payoffs = np.multiply(fd, payoffs)
+        payoffs = payoffs.reshape((payoffs.size, 1))
 
     max_payoffs = payoffs_sorted(points, payoffs, (game.payoff_p2_game1.shape[1] * game.payoff_p2_game2.shape[1]))
     # sort the payoffs
@@ -89,21 +98,21 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     fd = 1
 
     # activate FD function if necessary
-    if game.FD:
-        if game.FD_function_use == "FD":
+    if game.FD or game.rarity:
+        if game.FD:
             fd = fd_function(frequency_pairs)
-        elif game.FD_function_use == "mu":
+        elif game.rarity:
             fd = mu_function(game, rho_function(frequency_pairs))
-    else:
-        fd = 1
+
+        # payoffs are calculated
+    payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
 
     if game.rarity:
-        payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
-        payoffs = np.multiply(profit_function(mu_function(game, rho_function(fd))), payoffs)
+        payoffs = np.multiply(fd, payoffs)
+        payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
-        payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
         payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
