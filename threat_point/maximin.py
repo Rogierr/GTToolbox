@@ -36,16 +36,15 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     fd = 1
 
     # activate FD
-    if game.FD or game.rarity:
-        if game.FD:
-            fd = fd_function(frequency_pairs)
-        elif game.rarity:
-            fd = mu_function(game, rho_function(frequency_pairs))
+    if game.FD:
+        fd = fd_function(frequency_pairs)
+    elif game.rarity:
+        fd = mu_function(game, rho_function(frequency_pairs))
 
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p1), axis=1)
 
-    if game.rarity:
+    if False: # game.rarity:
         print("Plotting with rarity active")
         payoffs = np.multiply(fd, payoffs)
         payoffs = np.multiply(profit_function(fd), payoffs)
@@ -55,7 +54,7 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
         payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    max_payoffs = payoffs_sorted(points, payoffs, (game.payoff_p2_game1.shape[1] * game.payoff_p2_game2.shape[1]))
+    max_payoffs = payoffs_sorted(points, payoffs, (game.payoff_p1_game1.shape[1] * game.payoff_p1_game2.shape[1]))
     # sort the payoffs
 
     nan_delete = np.where(np.isnan(max_payoffs))  # delete results which are NaN (see thesis why)
@@ -98,16 +97,15 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
     fd = 1
 
     # activate FD function if necessary
-    if game.FD or game.rarity:
-        if game.FD:
-            fd = fd_function(frequency_pairs)
-        elif game.rarity:
-            fd = mu_function(game, rho_function(frequency_pairs))
+    if game.FD:
+        fd = fd_function(frequency_pairs)
+    elif game.rarity:
+        fd = mu_function(game, rho_function(frequency_pairs))
 
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
 
-    if game.rarity:
+    if False: # game.rarity:
         payoffs = np.multiply(fd, payoffs)
         payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
