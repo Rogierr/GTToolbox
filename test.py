@@ -27,16 +27,20 @@ matrixC = np.matrix('0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225
 
 ETP = ETPGame(p1_1,p2_1,p1_2,p2_2,trans1_1,trans2_1,trans1_2,trans2_2,matrixC)
 # TestGame = ETPGame(ts1_1,ts2_1,ts1_2,ts2_2, trans1_1,trans2_1, trans1_2, trans2_2, matrixA)
-
+x = np.array([0, 0, 0, 1, 0, 0, 0, 0])
 # ETP.activate_fd()
 ETP.activate_rarity()
 ETP.plotting_rare("Rarity")
-ETP.activate_hysteresis(2.5)
+# ETP.activate_hysteresis(2.5)
 ETP.adjust_mu(0.05)
-# ETP.plot_all_rewards(1000000)
-# plt.show()
-ETP.compute_threat_point(200000, True, True, True)
-ETP.compute_maximin(200000, True, True)
+ETP.plot_all_rewards(5000000)
+
+rewards_p1 = np.array([16, 0.56539, 1.13078, -1.9170, 4, 0.3917, 0.7834, 35.213])
+rewards_p2 = np.array([16, 1.13078, 0.56539, -1.9042, 4, 0.7834, 0.3917, 35.213])
+plt.scatter(rewards_p1, rewards_p2)
+plt.show()
+# ETP.compute_threat_point(100000, True, True, True)
+# ETP.compute_maximin(100000, True, True)
 
 
 # TestGame.activate_fd()

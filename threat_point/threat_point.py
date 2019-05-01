@@ -47,7 +47,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     if self.rarity:
         print("Plotting with rarity active")
         payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
+        # payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
@@ -116,7 +116,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     if self.rarity:
         payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
+        # payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function

@@ -44,10 +44,10 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p1), axis=1)
 
-    if False: # game.rarity:
+    if game.rarity:
         print("Plotting with rarity active")
         payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
+        # payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
@@ -105,9 +105,9 @@ def optimized_maximin(game, points, show_strat_p1, show_strat_p2):
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, game.payoff_p2), axis=1)
 
-    if False: # game.rarity:
+    if game.rarity:
         payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
+        # payoffs = np.multiply(profit_function(fd), payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
     else:
         # compute the payoffs with payoffs and FD function
