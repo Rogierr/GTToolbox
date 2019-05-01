@@ -55,6 +55,30 @@ def plot_all_rewards(self, points):
 
     draw_payoffs = random_strategy_draw(points, self.total_payoffs)
 
+    print("Payoffs before adjustment of balance equation")
+
+    print("Minimal x0", np.min(draw_payoffs[:, 0]))
+    print("Minimal x1", np.min(draw_payoffs[:, 1]))
+    print("Minimal x2", np.min(draw_payoffs[:, 2]))
+    print("Minimal x3", np.min(draw_payoffs[:, 3]))
+    print("Minimal x4", np.min(draw_payoffs[:, 4]))
+    print("Minimal x5", np.min(draw_payoffs[:, 5]))
+    print("Minimal x6", np.min(draw_payoffs[:, 6]))
+    print("Minimal x7", np.min(draw_payoffs[:, 7]))
+
+    print("")
+    print("Maximal x0", np.max(draw_payoffs[:, 0]))
+    print("Maximal x1", np.max(draw_payoffs[:, 1]))
+    print("Maximal x2", np.max(draw_payoffs[:, 2]))
+    print("Maximal x3", np.max(draw_payoffs[:, 3]))
+    print("Maximal x4", np.max(draw_payoffs[:, 4]))
+    print("Maximal x5", np.max(draw_payoffs[:, 5]))
+    print("Maximal x6", np.max(draw_payoffs[:, 6]))
+    print("Maximal x7", np.max(draw_payoffs[:, 7]))
+
+    print("")
+    print("")
+
     ## Calculate the balance equations
 
     draw_payoffs = balance_equation_all(self, points, draw_payoffs)
@@ -69,6 +93,31 @@ def plot_all_rewards(self, points):
             fd = fd_function(draw_payoffs)
         elif self.rarity:
             fd = mu_function(self, rho_function(draw_payoffs))
+
+
+    print("Payoffs after adjustment of balance equation")
+
+    print("Minimal x0", np.min(draw_payoffs[:, 0]))
+    print("Minimal x1", np.min(draw_payoffs[:, 1]))
+    print("Minimal x2", np.min(draw_payoffs[:, 2]))
+    print("Minimal x3", np.min(draw_payoffs[:, 3]))
+    print("Minimal x4", np.min(draw_payoffs[:, 4]))
+    print("Minimal x5", np.min(draw_payoffs[:, 5]))
+    print("Minimal x6", np.min(draw_payoffs[:, 6]))
+    print("Minimal x7", np.min(draw_payoffs[:, 7]))
+
+    print("")
+    print("Maximal x0", np.max(draw_payoffs[:, 0]))
+    print("Maximal x1", np.max(draw_payoffs[:, 1]))
+    print("Maximal x2", np.max(draw_payoffs[:, 2]))
+    print("Maximal x3", np.max(draw_payoffs[:, 3]))
+    print("Maximal x4", np.max(draw_payoffs[:, 4]))
+    print("Maximal x5", np.max(draw_payoffs[:, 5]))
+    print("Maximal x6", np.max(draw_payoffs[:, 6]))
+    print("Maximal x7", np.max(draw_payoffs[:, 7]))
+
+    print("")
+    print("")
 
     payoffs_p1 = np.sum(np.multiply(draw_payoffs, self.payoff_p1), axis=1)
     payoffs_p2 = np.sum(np.multiply(draw_payoffs, self.payoff_p2), axis=1)

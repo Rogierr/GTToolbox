@@ -33,18 +33,18 @@ ETP.activate_rarity()
 ETP.plotting_rare("Rarity")
 # ETP.activate_hysteresis(2.5)
 ETP.adjust_mu(0.05)
-ETP.plot_all_rewards(5000000)
+ETP.plot_all_rewards(20000000)
 
 rewards_p1 = np.array([16, 0.56539, 1.13078, -1.9170, 4, 0.3917, 0.7834, 35.213])
 rewards_p2 = np.array([16, 1.13078, 0.56539, -1.9042, 4, 0.7834, 0.3917, 35.213])
 
-sixteen_p1 = np.array([13.6, 4.946, 9.233, 5.574, 7.801, -2.452, -4.539, -3.556, 8.377, -2.817, -4.904, -3.962, 2.033,
-                       -2.694, -4.252, 1.685])
-sixteen_p2 = np.array([13.6, 9.233, 4.946, 5.574, 8.377, -4.904, -2.817, -3.963, 7.801, -4.539, -2.452, -3.556, 2.033,
-                       -4.252, -2.694, 1.685])
+# sixteen_p1 = np.array([13.6, 4.946, 9.233, 5.574, 7.801, -2.452, -4.539, -3.556, 8.377, -2.817, -4.904, -3.962, 2.033,
+#                        -2.694, -4.252, 1.685])
+# sixteen_p2 = np.array([13.6, 9.233, 4.946, 5.574, 8.377, -4.904, -2.817, -3.963, 7.801, -4.539, -2.452, -3.556, 2.033,
+#                        -4.252, -2.694, 1.685])
 
 plt.scatter(rewards_p1, rewards_p2)
-plt.scatter(sixteen_p1, sixteen_p2)
+# plt.scatter(sixteen_p1, sixteen_p2)
 plt.show()
 # ETP.compute_threat_point(100000, True, True, True)
 # ETP.compute_maximin(100000, True, True)

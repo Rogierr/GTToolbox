@@ -8,7 +8,7 @@ matrixC = np.matrix('0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225
                     ' 0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225 0.195 0.1575 0.1575 0.06;'
                     ' 0.285 0.25 0.25 0.225 0.195 0.1575 0.1575 0.06; 0.57 0.5 0.5 0.45 0.39 0.315 0.315 0.12')
 
-draw_payoffs = np.array([0.00001, 0.00001, 0.00001, 0.9999, 0.00001, 0.00001, 0.00001, 0.9999])
+draw_payoffs = np.array([0., 0., 0., 1., 0., 0., 0., 1.])
 
 yi = np.zeros(8)
 Q = np.zeros(1)
@@ -19,7 +19,7 @@ yi[0:4] = draw_payoffs[0:4] / np.sum(
 yi[4:8] = draw_payoffs[4:8] / np.sum(
     draw_payoffs[4:8])
 
-index_values = np.arange(1)
+index_values = np.arange(8)
 
 p1_px_between = np.asarray(pi)
 p1_px = p1_px_between[0]
@@ -32,7 +32,6 @@ for i in np.arange(35):
         new_x = p1_px - np.dot(draw_payoffs, etp_calculation)
         np.place(new_x, new_x < 0, 0)
         np.place(new_x, new_x > 1, 1)
-        np.place(yi, np.isnan(yi), 0)
 
         upper_part_Q = np.sum(np.multiply(yi[4:8], new_x[:, 4:8]))
         leftdown_part_Q = np.sum(
@@ -50,7 +49,6 @@ for i in np.arange(35):
         new_x = p1_px - np.dot(draw_payoffs, etp_calculation)
         np.place(new_x, new_x < 0, 0)
         np.place(new_x, new_x > 1, 1)
-        np.place(yi, np.isnan(yi), 0)
 
         upper_part_Q = np.sum(np.multiply(yi[4:8],
                                           new_x[:, 4:8]))
