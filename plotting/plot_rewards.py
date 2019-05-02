@@ -144,7 +144,7 @@ def plot_all_rewards(self, points):
 
     self.minimal_payoffs = np.zeros(2)
     self.minimal_payoffs = [np.min(payoffs_p1), np.min(payoffs_p2)]
-    #
+
     # all_payoffs = np.array([payoffs_p1, payoffs_p2])
     # all_payoffs = np.transpose(all_payoffs)
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
@@ -154,7 +154,7 @@ def plot_all_rewards(self, points):
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
-    #         plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
+    # plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
     end_time = time.time()
     # plt.show()
 

@@ -8,7 +8,7 @@ matrixC = np.matrix('0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225
                     ' 0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225 0.195 0.1575 0.1575 0.06;'
                     ' 0.285 0.25 0.25 0.225 0.195 0.1575 0.1575 0.06; 0.57 0.5 0.5 0.45 0.39 0.315 0.315 0.12')
 
-draw_payoffs = np.array([0., 0., 0., 1., 0., 0., 0., 1.])
+draw_payoffs = np.array([0., 1., 0., 0., 0., 1., 0., 0.])
 
 yi = np.zeros(8)
 Q = np.zeros(1)
@@ -45,7 +45,7 @@ for i in np.arange(35):
         draw_payoffs[0:4] = (np.multiply(Q, yi[0:4]))
         draw_payoffs[4:8] = np.multiply((1 - Q), yi[4:8])
 
-    if i < 10:
+    if i < 35:
         new_x = p1_px - np.dot(draw_payoffs, etp_calculation)
         np.place(new_x, new_x < 0, 0)
         np.place(new_x, new_x > 1, 1)
