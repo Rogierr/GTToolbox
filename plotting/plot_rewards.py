@@ -46,7 +46,7 @@ def plot_single_period_pure_rewards(self):
     plt.show()
 
 
-def plot_all_rewards(self, points):
+def plot_all_rewards(self, points, k):
     print("Now plotting all rewards")
 
     start_time = time.time()  # timer start
@@ -126,8 +126,8 @@ def plot_all_rewards(self, points):
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
         print("Plotting with rarity active")
-        payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
-        payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
+        # payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
+        # payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
     elif self.FD:
         print("Normal plotting active")
         payoffs_p1 = np.multiply(fd, payoffs_p1)
@@ -150,10 +150,17 @@ def plot_all_rewards(self, points):
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars with Rarity Value")
+    plt.title("Small Fish Wars with Hysteresis")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
+    plt.figtext(0,0,'With hysteresis phi at: ' + str(self.phi))
+    plt.figtext(0,-0.05,'And m at: ' + str(self.m))
+    plt.axis('equal')
+    plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
+    # plt.savefig('figures/m = 0.05, phi = 1.5 with rarity.png', dpi=300, bbox_inches="tight")
+
+
     # plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
     end_time = time.time()
     # plt.show()

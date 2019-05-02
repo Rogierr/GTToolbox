@@ -137,8 +137,8 @@ class ETPGame:
 
     # below this line we incorporate some functions within the class
 
-    def plot_all_rewards(self, points):
-        game_plot.plot_all_rewards(self, points)
+    def plot_all_rewards(self, points, k):
+        game_plot.plot_all_rewards(self, points, k)
 
     def plot_convex_hull_pure_rewards(self):
         game_plot.plot_convex_hull_pure_rewards(self)

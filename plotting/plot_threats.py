@@ -7,8 +7,7 @@ def plot_threat_point(self):
     """This function plots the threat point if found"""
 
     plt.figure()
-
-    plt.scatter(self.threat_point[0], self.threat_point[1], zorder=10, color='r', label='Threat point')
+    plt.scatter(self.threat_point[0], self.threat_point[1], s=0.3, zorder=10, color='r', label='Threat point')
     plt.legend()
     plt.show()
 
