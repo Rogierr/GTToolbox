@@ -28,16 +28,16 @@ matrixC = np.matrix('0.00 0.0 0.0 0.00 0.0 0.00 0.00 0.00; 0.285 0.25 0.25 0.225
 ETP = ETPGame(p1_1,p2_1,p1_2,p2_2,trans1_1,trans2_1,trans1_2,trans2_2,matrixC)
 # TestGame = ETPGame(ts1_1,ts2_1,ts1_2,ts2_2, trans1_1,trans2_1, trans1_2, trans2_2, matrixA)
 
-phi_range = np.arange(0, 1.51, 0.01)
+m_range = np.arange(0.05, 1.01, 0.01)
 
-for i in np.arange(0, 151):
+for i in np.arange(0, 96):
 # ETP.activate_fd()
     print(i)
     ETP.activate_rarity()
     ETP.plotting_rare("Rarity")
-    ETP.activate_hysteresis(phi_range[i])
-    ETP.adjust_mu(0.05)
-    ETP.plot_all_rewards(1000000, i)
+    ETP.activate_hysteresis(1.5)
+    ETP.adjust_mu(m_range[95-i])
+    ETP.plot_all_rewards(500000, i)
 
 # rewards_p1 = np.array([16, 0.56539, 1.13078, -1.9170, 4, 0.3917, 0.7834, 35.213])
 # rewards_p2 = np.array([16, 1.13078, 0.56539, -1.9042, 4, 0.7834, 0.3917, 35.213])
@@ -54,10 +54,10 @@ for i in np.arange(0, 151):
 # # plt.scatter(sixteen_p1, sixteen_p2)
 # plt.scatter(new_p1, new_p2)
 
-# ETP.compute_threat_point(100000, True, True, True)
-# ETP.compute_maximin(100000, True, True)
-
-
+# ETP.compute_threat_point(1000000, True, True, True)
+# ETP.compute_maximin(1000000, True, True)
+#
+#
 # TestGame.activate_fd()
 # TestGame.compute_threat_point(500000, True, True, True)
 # TestGame.compute_maximin(500000, True, True)
