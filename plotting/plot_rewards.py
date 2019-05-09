@@ -66,6 +66,9 @@ def plot_all_rewards(self, points, k):
     print("Minimal x6", np.min(draw_payoffs[:, 6]))
     print("Minimal x7", np.min(draw_payoffs[:, 7]))
 
+    print("Minimal over state 1", np.min(draw_payoffs[:, 0:4]))
+    print("Minimal over state 2", np.min(draw_payoffs[:, 4:8]))
+
     print("")
     print("Maximal x0", np.max(draw_payoffs[:, 0]))
     print("Maximal x1", np.max(draw_payoffs[:, 1]))
@@ -75,6 +78,9 @@ def plot_all_rewards(self, points, k):
     print("Maximal x5", np.max(draw_payoffs[:, 5]))
     print("Maximal x6", np.max(draw_payoffs[:, 6]))
     print("Maximal x7", np.max(draw_payoffs[:, 7]))
+
+    print("Maximal over state 1", np.max(draw_payoffs[:, 0:4]))
+    print("Maximal over state 2", np.max(draw_payoffs[:, 4:8]))
 
     print("")
     print("")
@@ -106,6 +112,9 @@ def plot_all_rewards(self, points, k):
     print("Minimal x6", np.min(draw_payoffs[:, 6]))
     print("Minimal x7", np.min(draw_payoffs[:, 7]))
 
+    print("Minimal over state 1", np.min(draw_payoffs[:, 0:4]))
+    print("Minimal over state 2", np.min(draw_payoffs[:, 4:8]))
+
     print("")
     print("Maximal x0", np.max(draw_payoffs[:, 0]))
     print("Maximal x1", np.max(draw_payoffs[:, 1]))
@@ -115,6 +124,9 @@ def plot_all_rewards(self, points, k):
     print("Maximal x5", np.max(draw_payoffs[:, 5]))
     print("Maximal x6", np.max(draw_payoffs[:, 6]))
     print("Maximal x7", np.max(draw_payoffs[:, 7]))
+
+    print("Maximal over state 1", np.max(draw_payoffs[:, 0:4]))
+    print("Maximal over state 2", np.max(draw_payoffs[:, 4:8]))
 
     print("")
     print("")
@@ -126,8 +138,8 @@ def plot_all_rewards(self, points, k):
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
         print("Plotting with rarity active")
-        # payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
-        # payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
+        payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
+        payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
     elif self.FD:
         print("Normal plotting active")
         payoffs_p1 = np.multiply(fd, payoffs_p1)
@@ -150,7 +162,7 @@ def plot_all_rewards(self, points, k):
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars with Hysteresis")
+    plt.title("Small Fish Wars with Hysteresis and Rarity Value")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
@@ -158,9 +170,10 @@ def plot_all_rewards(self, points, k):
     plt.figtext(0, -0.05,'And m at: ' + str(self.m))
     # plt.figtext(0, -0.1,'Minimal rewards: ' + str(self.minimal_payoffs))
     # plt.figtext(0, -0.15,'Maximal rewards: ' + str(self.maximal_payoffs))
-    # plt.axis('equal')
-    plt.xlim(0, 15)
-    plt.ylim(0, 15)
+    plt.axis('equal')
+    # plt.xlim(-6, 20)
+    # plt.ylim(-6, 20)
+    plt.scatter(12.57,12.57 , color='r')
     # plt.savefig('figures/m = 1, phi = 1.5.png', dpi=300, bbox_inches="tight")
     plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
     # plt.show()

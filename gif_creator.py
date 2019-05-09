@@ -18,5 +18,5 @@ for filename in files:
     images.append(imageio.imread(filename))
 
 imageio.mimsave(
-    'C:\\Users\\HarmelinkRLA\\Dropbox\\Universiteit Twente\\Papers\\Rarity Value\\figures\\Verzoek Reinoud\\gifs\\movie m loop, phi = 1.5.gif',
+    'C:\\Users\\HarmelinkRLA\\Dropbox\\Universiteit Twente\\Papers\\Rarity Value\\figures\\Verzoek Reinoud\\gifs\\movie m loop, phi = 0.gif',
     images, duration=0.2)
