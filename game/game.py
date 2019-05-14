@@ -157,3 +157,6 @@ class ETPGame:
 
     def compute_threat_point(self, points, show_p1, show_p2, print_text):
         tp.threat_point_optimized(self, points, show_p1, show_p2, print_text)
+
+    def compute_try_out(self, points, iter):
+        tp.mixed_strategy_try_out(self, points, iter)
