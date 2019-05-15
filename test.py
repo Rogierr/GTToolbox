@@ -38,14 +38,15 @@ ETP.activate_rarity()
 ETP.plotting_rare("Rarity")
 ETP.activate_hysteresis(1.5)
 ETP.adjust_mu(0.05)
-# ETP.compute_try_out(1000, 2500)
+ETP.compute_try_out(1000, 2500)
 
 # ETP.plot_all_rewards(5000000, 4)
 
-ETP.compute_threat_point(1000000, True, True, True)
-ETP.compute_maximin(1000000, True, True)
+# ETP.compute_threat_point(1000000, True, True, True)
+# ETP.compute_maximin(1000000, True, True)
 #
 #
 # TestGame.activate_fd()
-# TestGame.compute_threat_point(500000, True, True, True)
-# TestGame.compute_maximin(500000, True, True)
+# TestGame.compute_try_out(1000, 2500)
+# TestGame.compute_threat_point(1000000, True, True, True)
+# TestGame.compute_maximin(1000000, True, True)
