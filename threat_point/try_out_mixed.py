@@ -16,7 +16,8 @@ def mixed_strategy_try_out(self, points, iterations):
     best_found_maxmin = None
 
     for ite in np.arange(0, iterations):
-        print("Currently at iteration:", ite)
+        if ite % 100 == 0:
+            print("Currently at iteration:", ite)
         p1_1 = random_strategy_draw(points, 2)
         p1_2 = random_strategy_draw(points, 2)
 
@@ -27,13 +28,13 @@ def mixed_strategy_try_out(self, points, iterations):
 
         c = 0
 
-        for i in range(0, 2):
-            for j in range(0, 2):
+        for i in np.arange(0, 2):
+            for j in np.arange(0, 2):
                 x[:, c] = np.multiply(p1_1[:, i], p2_1[:, j])
                 c += 1
 
-        for i in range(0, 2):
-            for j in range(0, 2):
+        for i in np.arange(0, 2):
+            for j in np.arange(0, 2):
                 x[:, c] = np.multiply(p1_2[:, i], p2_2[:, j])
                 c += 1
 
@@ -63,7 +64,7 @@ def mixed_strategy_try_out(self, points, iterations):
         nan_delete = np.where(np.isnan(payoffs))  # delete payoffs which are a NaN
         max_payoffs_p1 = np.delete(payoffs, nan_delete[0], 0)  # actually delete them
 
-        threat_candidate_p1 = np.nanmax(max_payoffs_p1)
+        threat_candidate_p1 = np.max(max_payoffs_p1)
 
         if ite == 0:
             best_found = threat_candidate_p1
@@ -71,7 +72,8 @@ def mixed_strategy_try_out(self, points, iterations):
             best_found = threat_candidate_p1
 
     for ite in np.arange(0, iterations):
-        print("Currently at iteration:", ite)
+        if ite % 100 == 0:
+            print("Currently at iteration:", ite)
         p1_1 = random_strategy_draw(1, 2)
         p1_2 = random_strategy_draw(1, 2)
 
@@ -118,12 +120,12 @@ def mixed_strategy_try_out(self, points, iterations):
         nan_delete = np.where(np.isnan(payoffs))  # delete payoffs which are a NaN
         min_payoffs_p1 = np.delete(payoffs, nan_delete[0], 0)  # actually delete them
 
-        maxmin_cand_p1 = np.nanmin(min_payoffs_p1)
+        maxmin_cand_p1 = np.min(min_payoffs_p1)
 
         if ite == 0:
             best_found_maxmin = maxmin_cand_p1
         elif best_found_maxmin < maxmin_cand_p1:
             best_found_maxmin = maxmin_cand_p1
 
-    print("Best found result is", best_found)
+    print("Best found threat is", best_found)
     print("Best found maxmin is", best_found_maxmin)

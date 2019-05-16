@@ -146,8 +146,8 @@ class ETPGame:
     def plot_single_period_pure_rewards(self):
         game_plot.plot_single_period_pure_rewards(self)
 
-    def plot_threat_point(self):
-        game_plot.plot_threat_point(self)
+    def plot_threat_point(self, k):
+        game_plot.plot_threat_point(self, k)
 
     def plot_threat_point_lines(self):
         game_plot.plot_threat_point_lines(self)
