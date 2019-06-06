@@ -99,6 +99,7 @@ def plot_all_rewards(self, points, k):
             fd = fd_function(draw_payoffs)
         elif self.rarity:
             fd = mu_function(self, rho_function(draw_payoffs))
+            mu_indic = np.where(fd < 0.06)
 
 
     print("Payoffs after adjustment of balance equation")
@@ -162,10 +163,11 @@ def plot_all_rewards(self, points, k):
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars")
+    plt.title("Small Fish Wars with Hysteresis and Rarity Value")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
+
     # plt.figtext(0, 0,'With hysteresis phi at: ' + str(self.phi))
     # plt.figtext(0, -0.05,'And m at: ' + str(self.m))
     # plt.figtext(0, -0.1,'Minimal rewards: ' + str(self.minimal_payoffs))
@@ -174,7 +176,7 @@ def plot_all_rewards(self, points, k):
     # plt.xlim(-6, 20)
     # plt.ylim(-6, 20)
     # plt.scatter(12.57,12.57 , color='r')
-    # plt.savefig('figures/m = 1, phi = 1.5.png', dpi=300, bbox_inches="tight")
+    plt.savefig('figures/m = 0.05, phi = 1.5.png, with rarity filter q2 smaller than 0.01.png', dpi=300, bbox_inches="tight")
     # plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
     # plt.show()
 

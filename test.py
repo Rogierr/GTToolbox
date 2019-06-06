@@ -40,7 +40,7 @@ ETP.activate_hysteresis(1.5)
 ETP.adjust_mu(0.05)
 # ETP.compute_try_out(5000, 5000)
 # ETP.compute_threat_point(2000000, True, True, True)
-ETP.plot_all_rewards(5000000, 0)
+ETP.plot_all_rewards(5000, 0)
 # ETP.plot_threat_point()
 
 
