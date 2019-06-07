@@ -148,6 +148,10 @@ def plot_all_rewards(self, points, k):
 
     # here below we just randomly throw out some stuff
 
+    payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
+    payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
+
+
     delete_indic = np.where(np.isnan(payoffs_p1))
     payoffs_p1 = np.delete(payoffs_p1, delete_indic[0], 0)
     payoffs_p2 = np.delete(payoffs_p2, delete_indic[0], 0)
@@ -176,7 +180,7 @@ def plot_all_rewards(self, points, k):
     # plt.xlim(-6, 20)
     # plt.ylim(-6, 20)
     # plt.scatter(12.57,12.57 , color='r')
-    plt.savefig('figures/m = 0.05, phi = 1.5.png, with rarity filter q2 smaller than 0.01.png', dpi=300, bbox_inches="tight")
+    plt.savefig('figures/m = 0.05, phi = 1.5.png, with only rewards mu larger than 0.06.png', dpi=300, bbox_inches="tight")
     # plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
     # plt.show()
 
