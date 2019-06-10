@@ -4,6 +4,12 @@ import numpy as np
 payoffs_p1 = np.array([[16, 14], [28, 24]])
 payoffs_p2 = np.array([[16, 28], [14, 24]])
 
+payoffs_p1_s2 = np.array([[4, 3.5], [7, 6]])
+payoffs_p2_s2 = np.array([[4, 7], [3.5, 6]])
+
+trans_prob_s1 = np.array([[0.8, 0.7], [0.7, 0.6]])
+trans_prob_s2 = np.array([[0.5, 0.4], [0.4, 0.15]])
+
 x_p1 = np.zeros(2)
 x_p2 = np.zeros(2)
 
@@ -12,6 +18,31 @@ def sum_con(x):
 
     return 1 - np.sum(x)
 
+# Here below we have the functions for Type I CTP-CSP games
+
+def threat_point_p1(x):
+    "Function in order to determinate the threat point for p1"
+
+    return np.max(np.dot(payoffs_p1, x))
+
+
+def threat_point_p2(x):
+
+    return np.max(np.dot(x, payoffs_p2))
+
+
+def maximin_p1(x):
+    "Function in order to determine the maximin strategy for p1"
+
+    return np.max(np.dot(x, -payoffs_p1))
+
+
+def maximin_p2(x):
+    "Function in order to determine the maximin strategy for p2"
+
+    return np.max(np.dot(-payoffs_p2, x))
+
+# Here below are the functions for the Type I CTP-ESP games
 
 def payoff_p1_with_FD(x):
 
@@ -58,35 +89,49 @@ def maximin_p2_FD(x):
     FD_upper = 1 - 0.25*x[1]
     FD_bottom = 1 - 0.25*2*x[0] - 2/3*x[1]
 
-
     upper_result = np.multiply(FD_upper, res_p2[0])
     bottom_result = np.multiply(FD_bottom, res_p2[1])
-
 
     return np.min([-upper_result, -bottom_result])
 
 
-def threat_point_p1(x):
-    "Function in order to determinate the threat point for p1"
 
-    return np.max(np.dot(payoffs_p1, x))
-
-
-def threat_point_p2(x):
-
-    return np.max(np.dot(x, payoffs_p2))
+def balance_equation_1(x):
+    print("Placeholder")
 
 
-def maximin_p1(x):
-    "Function in order to determine the maximin strategy for p1"
-
-    return np.max(np.dot(x, -payoffs_p1))
+def balance_equation_2(x):
+    print("Placeholder")
 
 
-def maximin_p2(x):
-    "Function in order to determine the maximin strategy for p2"
+def balance_equation_3(x):
+    print("Placeholder")
 
-    return np.max(np.dot(-payoffs_p2, x))
+
+def balance_equation_4(x):
+    print("Placeholder")
+
+
+def threat_point_type_ii(x):
+    print("Placeholder again")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 bnds = [(0, 1), (0, 1)]
