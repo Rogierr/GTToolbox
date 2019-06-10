@@ -159,6 +159,8 @@ def plot_all_rewards(self, points, k):
     self.maximal_payoffs = np.zeros(2)
     self.maximal_payoffs = [np.max(payoffs_p1), np.max(payoffs_p2)]
 
+    print(self.maximal_payoffs)
+
     self.minimal_payoffs = np.zeros(2)
     self.minimal_payoffs = [np.min(payoffs_p1), np.min(payoffs_p2)]
 

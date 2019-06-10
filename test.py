@@ -41,7 +41,7 @@ ETP.activate_hysteresis(1.5)
 ETP.adjust_mu(0.05)
 # ETP.compute_try_out(5000, 5000)
 # ETP.compute_threat_point(2000000, True, True, True)
-#ETP.plot_all_rewards(5000000, 0)
+ETP.plot_all_rewards(5000000, 0)
 # ETP.plot_threat_point()
 
 
@@ -51,12 +51,12 @@ ETP.adjust_mu(0.05)
 # TestGame.compute_try_out(2000, 2500)
 # TestGame.compute_threat_point(1000000, True, True, True)
 # TestGame.compute_maximin(1000000, True, True)
-
-x = np.matrix([0, 0, 0, 1, 0, 0, 0, 1])
-x_res = balance_equation_all(ETP, 1, x)
-print(x_res)
-
-
-x_2 = np.matrix([1, 0, 0, 0, 0, 0, 0, 0])
-x_pres = balance_equation_all(ETP, 1, x_2)
-print(x_pres)
+#
+# x = np.matrix([0, 0, 0, 1, 0, 0, 0, 1])
+# x_res = balance_equation_all(ETP, 1, x)
+# print(x_res)
+#
+#
+# x_2 = np.matrix([1, 0, 0, 0, 0, 0, 0, 0])
+# x_pres = balance_equation_all(ETP, 1, x_2)
+# print(x_pres)
