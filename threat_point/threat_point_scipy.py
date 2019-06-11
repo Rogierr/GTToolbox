@@ -10,7 +10,12 @@ payoffs_p2_s2 = np.array([[4, 7], [3.5, 6]])
 trans_prob_s1 = np.array([[0.8, 0.7], [0.7, 0.6]])
 trans_prob_s2 = np.array([[0.5, 0.4], [0.4, 0.15]])
 
-x_typei = np.zeros(2)
+x_typei = np.random.beta(0.5, 0.5, 2)
+x_typei = x_typei / np.sum(x_typei)
+
+x_typeii = np.random.beta(0.5, 0.5, 4)
+x_typeii = x_typeii / np.sum(x_typeii)
+
 
 def sum_con(x):
 
@@ -25,6 +30,7 @@ def threat_point_p1(x):
 
 
 def threat_point_p2(x):
+    "Function that determines the threat point for p2"
 
     return np.max(np.dot(x, payoffs_p2))
 
@@ -42,6 +48,7 @@ def maximin_p2(x):
 
 # Here below are the functions for the Type I CTP-ESP games
 
+
 def payoff_p1_with_FD(x):
 
     res_p1 = np.dot(payoffs_p1, x)
@@ -53,6 +60,7 @@ def payoff_p1_with_FD(x):
     bottom_result = np.multiply(res_p1[1], FD_bottom)
 
     return np.max([upper_result, bottom_result])
+
 
 def payoff_p2_with_FD(x):
 
@@ -95,19 +103,97 @@ def maximin_p2_FD(x):
 
 
 def balance_equation_1(x):
-    print("Placeholder")
+
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
 
 
 def balance_equation_2(x):
-    print("Placeholder")
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
 
 
 def balance_equation_3(x):
-    print("Placeholder")
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
 
 
 def balance_equation_4(x):
-    print("Placeholder")
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
+
 
 def fd_eq1(x):
     print("Placeholder")
@@ -123,7 +209,40 @@ def fd_eq4(x):
 
 
 def threat_point_type_ii(x):
-    print("Placeholder again")
+
+    print("initialized x", x)
+    print("Sum of initialized x", np.sum(x))
+    x_uu = balance_equation_1(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_uu[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_uu[2:4])
+
+    up_up = res_p2_s1[0] + res_p2_s2[0]
+
+    x_ud = balance_equation_2(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_ud[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_ud[2:4])
+
+    up_down = res_p2_s1[0] + res_p2_s2[1]
+
+    x_du = balance_equation_3(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_du[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_du[2:4])
+
+    down_up = res_p2_s1[1] + res_p2_s2[0]
+
+    x_dd = balance_equation_4(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_dd[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_dd[2:4])
+
+    down_down = res_p2_s1[1] + res_p2_s2[1]
+
+
+
+    return np.max([up_up, up_down, down_up, down_down])
 
 
 
@@ -144,54 +263,57 @@ def threat_point_type_ii(x):
 
 
 
-bnds = [(0, 1), (0, 1)]
+bnds_typei = [(0, 1), (0, 1)]
+bnds_typeii = [(0, 1), (0, 1), (0, 1), (0, 1)]
+
 con = [{'type': 'eq', 'fun': sum_con}]
 
-# tp_p1 = minimize(threat_point_p1, x_p1, bounds=bnds,
+# tp_p1 = minimize(threat_point_p1, x_p1, bounds=bnds_typei,
 #                              constraints=con, options={'disp': False})  # minimizer threat point p1
 #
 # print("Player 2 wants to minimize payoff Player 1 and plays:", tp_p1.x)
 # print("Therefore the threat point of Player 1:", tp_p1.fun)
 #
-# tp_p2 = minimize(threat_point_p2, x_p2, bounds=bnds,
+# tp_p2 = minimize(threat_point_p2, x_p2, bounds=bnds_typei,
 #                              constraints=con, options={'disp': False})  # minimizer threat point p1
 #
 # print("Player 1 wants to minimize payoff Player 2 and plays:", tp_p2.x)
 # print("Therefore the threat point of Player 2:",tp_p2.fun)
 #
-# maximini_p1 = minimize(maximin_p1, x_p2, bounds=bnds, constraints=con, options={'disp': False})
+# maximini_p1 = minimize(maximin_p1, x_p2, bounds=bnds_typei, constraints=con, options={'disp': False})
 #
 # print("Player 1 wants to maximize his own payoff first and plays:", maximini_p1.x)
 # print("The maximin result found for Player 1:", -maximini_p1.fun)
 #
-# maximini_p2 = minimize(maximin_p2, x_p1, bounds=bnds, constraints=con, options={'disp': False})
+# maximini_p2 = minimize(maximin_p2, x_p1, bounds=bnds_typei, constraints=con, options={'disp': False})
 #
 # print("Player 2 wants to maximize his own payoff first and plays:", maximini_p2.x)
 # print("The maximin result found for Player 2:", -maximini_p2.fun)
 #
-tp_p1_with_FD = minimize(payoff_p1_with_FD, x_typei, bounds=bnds, constraints=con, options={'disp': False,  'eps': 5,
-                                                                                             'maxiter': 10000})
+# tp_p1_with_FD = minimize(payoff_p1_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,  'eps': 5,
+#                                                                                              'maxiter': 10000})
+#
+# print("Player 2 wants to minimize the payoff of Player 1 and plays:", tp_p1_with_FD.x)
+# print("The threat point of Player 1:", tp_p1_with_FD.fun)
+#
+# maxmin_p1_with_FD = minimize(maximin_p1_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False, 'eps': 5,
+#                                                                                              'maxiter': 10000})
+#
+# print("Player 1 wants to maximize his payoff and plays:", maxmin_p1_with_FD.x)
+# print("Maximin result of Player 1:", -maxmin_p1_with_FD.fun)
+#
+# tp_p2_with_FD = minimize(payoff_p2_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False, 'eps': 5,
+#                                                                                              'maxiter': 10000})
+#
+# print("Player 1 wants to minimize the payoff of Player 2 and plays:", tp_p2_with_FD.x)
+# print("The threat point of Player 2:", tp_p2_with_FD.fun)
+#
+#
+# maxmin_p2_with_FD = minimize(maximin_p2_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+#                                                                                              'eps': 5,
+#                                                                                              'maxiter': 10000})
+#
+# print("Player 2 wants to maximize his payoff and plays:", maxmin_p2_with_FD.x)
+# print("Maximin result of Player 2:", maxmin_p2_with_FD.fun)
 
-print("Player 2 wants to minimize the payoff of Player 1 and plays:", tp_p1_with_FD.x)
-print("The threat point of Player 1:", tp_p1_with_FD.fun)
-
-maxmin_p1_with_FD = minimize(maximin_p1_FD, x_typei, bounds=bnds, constraints=con, options={'disp': False, 'eps': 5,
-                                                                                             'maxiter': 10000})
-
-print("Player 1 wants to maximize his payoff and plays:", maxmin_p1_with_FD.x)
-print("Maximin result of Player 1:", -maxmin_p1_with_FD.fun)
-
-tp_p2_with_FD = minimize(payoff_p2_with_FD, x_typei, bounds=bnds, constraints=con, options={'disp': False, 'eps': 5,
-                                                                                             'maxiter': 10000})
-
-print("Player 1 wants to minimize the payoff of Player 2 and plays:", tp_p2_with_FD.x)
-print("The threat point of Player 2:", tp_p2_with_FD.fun)
-
-
-maxmin_p2_with_FD = minimize(maximin_p2_FD, x_typei, bounds=bnds, constraints=con, options={'disp': False,
-                                                                                             'eps': 5,
-                                                                                             'maxiter': 10000})
-
-print("Player 2 wants to maximize his payoff and plays:", maxmin_p2_with_FD.x)
-print("Maximin result of Player 2:", maxmin_p2_with_FD.fun)
-
+fd_p1 = minimize(threat_point_type_ii, x_typeii, bounds=bnds_typeii, constraints=con, options={'disp': True})
