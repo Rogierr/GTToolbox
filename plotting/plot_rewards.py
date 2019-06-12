@@ -99,7 +99,7 @@ def plot_all_rewards(self, points, k):
             fd = fd_function(draw_payoffs)
         elif self.rarity:
             fd = mu_function(self, rho_function(draw_payoffs))
-            mu_indic = np.where(fd < 0.06)
+            # mu_indic = np.where(fd < 0.06)
 
 
     print("Payoffs after adjustment of balance equation")
@@ -141,15 +141,15 @@ def plot_all_rewards(self, points, k):
         print("Plotting with rarity active")
         payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
         payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
-    elif self.FD:
+    elif self.FD or self.rarity:
         print("Normal plotting active")
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
 
     # here below we just randomly throw out some stuff
 
-    payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
-    payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
+    # payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
+    # payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
 
 
     delete_indic = np.where(np.isnan(payoffs_p1))
@@ -159,8 +159,6 @@ def plot_all_rewards(self, points, k):
     self.maximal_payoffs = np.zeros(2)
     self.maximal_payoffs = [np.max(payoffs_p1), np.max(payoffs_p2)]
 
-    print(self.maximal_payoffs)
-
     self.minimal_payoffs = np.zeros(2)
     self.minimal_payoffs = [np.min(payoffs_p1), np.min(payoffs_p2)]
 
@@ -169,7 +167,7 @@ def plot_all_rewards(self, points, k):
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars with Hysteresis and Rarity Value")
+    plt.title("Small Fish Wars with Hysteresis")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
@@ -181,8 +179,10 @@ def plot_all_rewards(self, points, k):
     plt.axis('equal')
     # plt.xlim(-6, 20)
     # plt.ylim(-6, 20)
-    # plt.scatter(12.57,12.57 , color='r')
-    plt.savefig('figures/m = 0.05, phi = 1.5.png, with only rewards mu larger than 0.06.png', dpi=300, bbox_inches="tight")
+    # plt.scatter(12.57, 12.57, color='yellow', label=r'$x^{sus}$')
+    # plt.scatter(6.5, 6.5, color='r', label=r'$x^{nr}$')
+    # plt.legend()
+    plt.savefig('figures/m = 1, phi = 1.5, with x_sus and x_nr.png', dpi=300, bbox_inches="tight")
     # plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
     # plt.show()
 
