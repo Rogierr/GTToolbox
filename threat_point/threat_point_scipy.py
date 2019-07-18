@@ -52,7 +52,11 @@ def maximin_p2(x: np.array) -> float:
 
 
 def payoff_p1_with_FD(x: np.array) -> float:
-
+    """
+    This function computes the payoff for P1 in case of the usage of an FD function
+    :param x: The stationary strategy of player 2
+    :return: The threat point result for player 1
+    """
     res_p1 = np.dot(payoffs_p1, x)
 
     FD_upper = 1 - 0.25*x[1]
@@ -79,28 +83,30 @@ def payoff_p2_with_FD(x: np.array) -> float:
 
 def maximin_p1_FD(x: np.array) -> float:
 
-    res_p1 = np.dot(x, -payoffs_p1)
+    res_p1_min = np.dot(x, -payoffs_p1)
 
-    FD_left = 1 - 0.25 * 2 * x[1]
-    FD_right = 1 - 0.25 * x[0] - 2 / 3 * x[1]
+    FD_left_min = 1 - 0.25 * 2 * x[1]
+    FD_right_min = 1 - 0.25 * x[0] - 2 / 3 * x[1]
 
-    left_result = np.multiply(FD_left, res_p1[0])
-    right_result = np.multiply(FD_right, res_p1[1])
+    left_result = np.multiply(FD_left_min, res_p1_min[0])
+    right_result = np.multiply(FD_right_min, res_p1_min[1])
 
     return np.max([left_result, right_result])
 
 
-# def maximin_p2_FD(x: np.array) -> float:
-#
-#     res_p2 = np.dot(-payoffs_p2, x)
-#
-#     FD_upper = 1 - 0.25*x[1]
-#     FD_bottom = 1 - 0.25*2*x[0] - 2/3*x[1]
-#
-#     upper_result = np.multiply(FD_upper, res_p2[0])
-#     bottom_result = np.multiply(FD_bottom, res_p2[1])
-#
-#     return np.max([upper_result, bottom_result])
+def maximin_p2_FD(x: np.array) -> float:
+
+    res_p2_min = np.dot(payoffs_p2, x)
+
+    print(res_p2_min)
+
+    FD_upper_min = 1 - 0.25*x[1]
+    FD_bottom_min = 1 - 0.25*2*x[0] - 2/3*x[1]
+
+    upper_result = np.multiply(FD_upper_min, res_p2_min[0])
+    bottom_result = np.multiply(FD_bottom_min, res_p2_min[1])
+
+    return np.max([-upper_result, -bottom_result])
 
 # HERE BELOW ARE SOME NEW TYPE II FUNCTIONS
 #
@@ -245,23 +251,6 @@ def maximin_p1_FD(x: np.array) -> float:
 #
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bnds_typei = [(0, 1), (0, 1)]
 bnds_typeii = [(0, 1), (0, 1), (0, 1), (0, 1)]
 
@@ -279,86 +268,113 @@ condition_test_p1 = np.zeros(test_n)
 condition_test_p2 = np.zeros(test_n)
 
 
-for i in np.arange(0, test_n):
-    if np.mod(i, 1000) == 0:
-        print("Still alive at", i)
+# for i in np.arange(0, test_n):
+#     if np.mod(i, 1000) == 0:
+#         print("Still alive at", i)
 
-    tp_p1 = minimize(threat_point_p1, x_typei, bounds=bnds_typei,
-                                 constraints=con, options={'disp': False})  # minimizer threat point p1
+# tp_p1 = minimize(threat_point_p1, x_typei, bounds=bnds_typei,
+#                              constraints=con, options={'disp': False})  # minimizer threat point p1
 
-    # print("Player 2 wants to minimize payoff Player 1 and plays:", tp_p1.x)
-    # print("Therefore the threat point of Player 1:", tp_p1.fun)
+# print("Player 2 wants to minimize payoff Player 1 and plays:", tp_p1.x)
+# print("Therefore the threat point of Player 1:", tp_p1.fun)
 
-    tp_p2 = minimize(threat_point_p2, x_typei, bounds=bnds_typei,
-                                 constraints=con, options={'disp': False})  # minimizer threat point p1
-
-    # print("Player 1 wants to minimize payoff Player 2 and plays:", tp_p2.x)
-    # print("Therefore the threat point of Player 2:",tp_p2.fun)
-
-    maximini_p1 = minimize(maximin_p1, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False})
-    #
-    # print("Player 1 wants to maximize his own payoff first and plays:", maximini_p1.x)
-    # print("The maximin result found for Player 1:", -maximini_p1.fun)
-
-    maximini_p2 = minimize(maximin_p2, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False})
-
-    # print("Player 2 wants to maximize his own payoff first and plays:", maximini_p2.x)
-    # print("The maximin result found for Player 2:", -maximini_p2.fun)
-
-    p1_res[i] = tp_p1.fun
-    p2_res[i] = tp_p2.fun
-
-    p1_maxi[i] = maximini_p1.fun
-    p2_maxi[i] = maximini_p2.fun
-
-for i in np.arange(0, test_n):
-    if(p1_maxi[i] <= p1_res[i]):
-        condition_test_p1[i] = True
-    else:
-        condition_test_p1[i] = False
-
-    if(p2_maxi[i] <= p2_res[i]):
-        condition_test_p2[i] = True
-    else:
-        condition_test_p2[i] = False
-
-print(np.all(condition_test_p1))
-print(np.all(condition_test_p2))
-
-# tp_p1_with_FD = minimize(payoff_p1_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
-#                                                                                                   'eps': 1,
-#                                                                                              'maxiter': 10000})
-# # p1_res[i] = tp_p1_with_FD.fun
+# tp_p2 = minimize(threat_point_p2, x_typei, bounds=bnds_typei,
+#                              constraints=con, options={'disp': False})  # minimizer threat point p1
 #
-# print("Player 2 wants to minimize the payoff of Player 1 and plays:", tp_p1_with_FD.x)
-# print("The threat point of Player 1:", tp_p1_with_FD.fun)
+# # print("Player 1 wants to minimize payoff Player 2 and plays:", tp_p2.x)
+# # print("Therefore the threat point of Player 2:",tp_p2.fun)
 #
-# maxmin_p1_with_FD = minimize(maximin_p1_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
-#                                                                                                   'eps': 5,
-#                                                                                              'maxiter': 10000})
+# maximini_p1 = minimize(maximin_p1, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False})
 # #
-# # # p1_maxi[i] = maxmin_p1_with_FD.fun
+# # print("Player 1 wants to maximize his own payoff first and plays:", maximini_p1.x)
+# # print("The maximin result found for Player 1:", -maximini_p1.fun)
 #
-# print("Player 1 wants to maximize his payoff and plays:", maxmin_p1_with_FD.x)
-# print("Maximin result of Player 1:", -maxmin_p1_with_FD.fun)
+# maximini_p2 = minimize(maximin_p2, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False})
+
+# print("Player 2 wants to maximize his own payoff first and plays:", maximini_p2.x)
+# print("The maximin result found for Player 2:", -maximini_p2.fun)
+
+# p1_res[i] = tp_p1.fun
+# p2_res[i] = tp_p2.fun
 #
-# tp_p2_with_FD = minimize(payoff_p2_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
-#                                                                                                   'eps': 5,
-#                                                                                              'maxiter': 10000})
+# p1_maxi[i] = maximini_p1.fun
+# p2_maxi[i] = maximini_p2.fun
+
+# for i in np.arange(0, test_n):
+#     if(p1_maxi[i] <= p1_res[i]):
+#         condition_test_p1[i] = True
+#     else:
+#         condition_test_p1[i] = False
 #
-# # p2_res[i] = tp_p2_with_FD.fun
+#     if(p2_maxi[i] <= p2_res[i]):
+#         condition_test_p2[i] = True
+#     else:
+#         condition_test_p2[i] = False
 #
-# print("Player 1 wants to minimize the payoff of Player 2 and plays:", tp_p2_with_FD.x)
-# print("The threat point of Player 2:", tp_p2_with_FD.fun)
-#
-#
-# maxmin_p2_with_FD = minimize(maximin_p2_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
-#                                                                                              'eps': 5,
-#                                                                                              'maxiter': 10000})
-#
-# # p2_maxi[i] = maxmin_p2_with_FD.fun
-#
-# print("Player 2 wants to maximize his payoff and plays:", maxmin_p2_with_FD.x)
+# print(np.all(condition_test_p1))
+# print(np.all(condition_test_p2))
+
+def tp_p1_typei_fd():
+
+    tp_p1_with_FD = minimize(payoff_p1_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                      'ftol': 1e-25,
+                                                                                                      'eps': 1,
+                                                                                                 'maxiter': 10000})
+    print("Player 2 wants to minimize the payoff of Player 1 and plays:", tp_p1_with_FD.x)
+    print("The threat point of Player 1:", tp_p1_with_FD.fun)
+
+
+def tp_p2_typei_fd():
+
+    tp_p2_with_FD = minimize(payoff_p2_with_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                      'ftol': 1e-25,
+                                                                                                      'eps': 1,
+                                                                                                      'maxiter': 10000})
+
+    print("Player 1 wants to minimize the payoff of Player 2 and plays:", tp_p2_with_FD.x)
+    print("The threat point of Player 2:", tp_p2_with_FD.fun)
+
+def maximin_p1_typei_fd():
+    save_values = np.zeros(3)
+    x_try_1 = np.array([1, 0])
+
+    maxmin_p1_try1 = minimize(maximin_p1_FD, x_try_1, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                    'ftol': 1e-25,
+                                                                                                    'eps': 1,
+                                                                                                    'maxiter': 100})
+
+    save_values[0] = maxmin_p1_try1.fun
+
+    x_try_2 = np.array([0, 1])
+
+    maxmin_p1_try2 = minimize(maximin_p1_FD, x_try_2, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                   'ftol': 1e-25,
+                                                                                                   'eps': 1,
+                                                                                                   'maxiter': 100})
+
+    save_values[1] = maxmin_p1_try2.fun
+
+    maxmin_p1_try3 = minimize(maximin_p1_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                    'ftol': 1e-25,
+                                                                                                    'eps': 1,
+                                                                                                    'maxiter': 10000})
+
+    save_values[2] = maxmin_p1_try3.fun
+
+    found_value = np.max(save_values)
+    found_value = -found_value
+
+    print("The maximin value for Player 1 found is", found_value)
+
+
+maximin_p1_typei_fd()
+
+def maximin_p2_typei_fd():
+    maxmin_p2_with_FD = minimize(maximin_p2_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                           'eps': 5,
+                                                                                              'maxiter': 10000})
+
+    print("Player 2 wants to maximize his payoff and plays:", maxmin_p2_with_FD.x)
 # print("Maximin result of Player 2:", maxmin_p2_with_FD.fun)
 
 # if np.any(p1_maxi <= p1_res):
