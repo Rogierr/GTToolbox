@@ -69,6 +69,11 @@ def payoff_p1_with_FD(x: np.array) -> float:
 
 
 def payoff_p2_with_FD(x: np.array) -> float:
+    """
+    This function computes the payoff for P2 in case of the usage of an FD function
+    :param x: The stationary strategy for player 1
+    :return: The threat point result for player 2
+    """
 
     res_p2 = np.dot(x, payoffs_p2)
 
@@ -96,17 +101,15 @@ def maximin_p1_FD(x: np.array) -> float:
 
 def maximin_p2_FD(x: np.array) -> float:
 
-    res_p2_min = np.dot(payoffs_p2, x)
-
-    print(res_p2_min)
+    res_p2_min = np.dot(-payoffs_p2, x)
 
     FD_upper_min = 1 - 0.25*x[1]
-    FD_bottom_min = 1 - 0.25*2*x[0] - 2/3*x[1]
+    FD_bottom_min = 1 - 0.5*x[0] - 2/3*x[1]
 
     upper_result = np.multiply(FD_upper_min, res_p2_min[0])
     bottom_result = np.multiply(FD_bottom_min, res_p2_min[1])
 
-    return np.max([-upper_result, -bottom_result])
+    return np.min([-upper_result, -bottom_result])
 
 # HERE BELOW ARE SOME NEW TYPE II FUNCTIONS
 #
@@ -363,18 +366,43 @@ def maximin_p1_typei_fd():
 
     found_value = np.max(save_values)
     found_value = -found_value
-
     print("The maximin value for Player 1 found is", found_value)
 
 
-maximin_p1_typei_fd()
-
 def maximin_p2_typei_fd():
-    maxmin_p2_with_FD = minimize(maximin_p2_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
-                                                                                           'eps': 5,
-                                                                                              'maxiter': 10000})
+    save_values = np.zeros(3)
+    x_try_1 = np.array([1, 0])
 
-    print("Player 2 wants to maximize his payoff and plays:", maxmin_p2_with_FD.x)
+    maxmin_p2_fd_try1 = minimize(maximin_p2_FD, x_try_1, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                      'ftol': 1e-25,
+                                                                                                    'eps': 1,
+                                                                                                    'maxiter': 100})
+
+    save_values[0] = maxmin_p2_fd_try1.fun
+
+    x_try_2 = np.array([0, 1])
+
+    maxmin_p2_fd_try2 = minimize(maximin_p2_FD, x_try_2, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                      'ftol': 1e-25,
+                                                                                                      'eps': 1,
+                                                                                                      'maxiter': 100})
+
+    save_values[1] = maxmin_p2_fd_try2.fun
+
+    maxmin_p2_fd_try3 = minimize(maximin_p2_FD, x_typei, bounds=bnds_typei, constraints=con, options={'disp': False,
+                                                                                                      'ftol': 1e-1000,
+                                                                                                      'eps': 5,
+                                                                                                      'maxiter': 100000})
+
+    save_values[2] = maxmin_p2_fd_try3.fun
+
+    found_value = np.max(save_values)
+
+    print("The maximin value for Player 2 found is", found_value)
+    print(save_values)
+
+maximin_p2_typei_fd()
+
 # print("Maximin result of Player 2:", maxmin_p2_with_FD.fun)
 
 # if np.any(p1_maxi <= p1_res):
