@@ -19,10 +19,18 @@ class Alice(Agent):
 
     def define_individual_rational_strategy(self):
         pure_strategy_exist = False
+        save_indices = np.zeros(game.shape[1])
 
         for i in np.arange(0, game.shape[1]):
-            print(np.argmax(game[:, i]))
+            save_indices[i] = np.argmax(game[:, i])
 
+        if np.max(save_indices) == np.min(save_indices):
+            pure_strategy_exist = True
+            self.strategy = save_indices[0]
+
+        if not pure_strategy_exist:
+            print("Yolo in de polo")
+            
 class Bob(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
