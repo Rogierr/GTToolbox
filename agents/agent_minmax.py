@@ -36,22 +36,22 @@ class Alice(Agent):
         for j in range(0, best_resp_p2.shape[0]):
             best_resp_ind_p2.append((j, best_resp_p2[j]))
 
-        NashEq_exists = False  # assume no Pure Nash exist first (for use if no pure is found)
+        nash_eq_exists = False  # assume no Pure Nash exist first (for use if no pure is found)
 
         # check if a pure Nash Equilibrium exists by looping over index values
         for i in range(0, len(best_resp_ind_p1)):
             for j in range(0, len(best_resp_ind_p2)):
                 if best_resp_ind_p1[i] == best_resp_ind_p2[j]:
-                    NashEq = best_resp_ind_p1[i]
-                    NashEq_exists = True  # pure Nash has been found, so change it's value to true
+                    nash_eq = best_resp_ind_p1[i]
+                    nash_eq_exists = True  # pure Nash has been found, so change it's value to true
 
-        if NashEq_exists:  # if a pure Nash Equilibrium exists, do the following
-            index_NashEq = NashEq  # get value of the Nash Equilibrium and print it on the screen
+        if nash_eq_exists:  # if a pure Nash Equilibrium exists, do the following
+            index_nash_eq = nash_eq  # get value of the Nash Equilibrium and print it on the screen
 
-            valueNash = game[index_NashEq]  # store the value of the Nash
-            equal = np.equal(valueNash, game)  # look for equal values which are Nash candidates
+            value_nash = game[index_nash_eq]  # store the value of the Nash
+            equal = np.equal(value_nash, game)  # look for equal values which are Nash candidates
 
-            self.strategy = NashEq[0]
+            self.strategy = nash_eq[0]
 
             # this code here below is for if there are multiple pure Nash candidates
             if np.sum(equal) > 1:  # if multiple pure Nash candidates exist
@@ -114,22 +114,22 @@ class Bob(Agent):
         for j in range(0, best_resp_p2.shape[0]):
             best_resp_ind_p2.append((j, best_resp_p2[j]))
 
-        NashEq_exists = False  # assume no Pure Nash exist first (for use if no pure is found)
+        nash_eq_exists = False  # assume no Pure Nash exist first (for use if no pure is found)
 
         # check if a pure Nash Equilibrium exists by looping over index values
         for i in range(0, len(best_resp_ind_p1)):
             for j in range(0, len(best_resp_ind_p2)):
                 if best_resp_ind_p1[i] == best_resp_ind_p2[j]:
-                    NashEq = best_resp_ind_p1[i]
-                    NashEq_exists = True  # pure Nash has been found, so change it's value to true
+                    nash_eq = best_resp_ind_p1[i]
+                    nash_eq_exists = True  # pure Nash has been found, so change it's value to true
 
-        if NashEq_exists:  # if a pure Nash Equilibrium exists, do the following
-            index_NashEq = NashEq  # get value of the Nash Equilibrium and print it on the screen
+        if nash_eq_exists:  # if a pure Nash Equilibrium exists, do the following
+            index_nash_eq = nash_eq  # get value of the Nash Equilibrium and print it on the screen
 
-            valueNash = game[index_NashEq]  # store the value of the Nash
-            equal = np.equal(valueNash, game)  # look for equal values which are Nash candidates
+            value_nash = game[index_nash_eq]  # store the value of the Nash
+            equal = np.equal(value_nash, game)  # look for equal values which are Nash candidates
 
-            self.strategy = NashEq[1]
+            self.strategy = nash_eq[1]
 
             # this code here below is for if there are multiple pure Nash candidates
             if np.sum(equal) > 1:  # if multiple pure Nash candidates exist
@@ -149,7 +149,6 @@ class Bob(Agent):
                         if column_max == value_found:  # and last but not least execute if value found is column maximum
                             self.strategy = index_row_column[0]
 
-
     def print_strategy(self):
         column_number = str(int(self.strategy+1)) + str("th")
 
@@ -165,6 +164,7 @@ class Bob(Agent):
 
         self.log_info("I received a payoff of %s" % str(-self.result))
 
+
 if __name__ == '__main__':
 
     ns = run_nameserver()
@@ -176,7 +176,6 @@ if __name__ == '__main__':
 
     alice.connect(bob.addr('result'), handler='store_result')
     bob.connect(alice.addr('result'), handler='store_result')
-
 
     alice.hello('Bob')
     time.sleep(2)
