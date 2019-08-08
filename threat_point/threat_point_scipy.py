@@ -248,107 +248,103 @@ def maximin_p2_typei_fd():
 
     return found_value
 
-tp_p1_typei_fd()
-tp_p2_typei_fd()
-maximin_p1_typei_fd()
-maximin_p2_typei_fd()
-
-# fd_p1 = minimize(threat_point_type_ii, x_typeii, bounds=bnds_typeii, constraints=con, options={'disp': True})
+# tp_p1_typei_fd()
+# tp_p2_typei_fd()
+# maximin_p1_typei_fd()
+# maximin_p2_typei_fd()
 
 # HERE BELOW ARE SOME NEW TYPE II FUNCTIONS
-#
-# def balance_equation_1(x: np.array) -> np.array:
-#
-#     y_s1 = np.zeros(2)
-#     y_s2 = np.zeros(2)
-#
-#     y_s1[0] = x[0] / np.sum(x[0:2])
-#     y_s1[1] = x[1] / np.sum(x[0:2])
-#
-#     y_s2[0] = x[2] / np.sum(x[2:4])
-#     y_s2[1] = x[3] / np.sum(x[2:4])
-#
-#     Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
-#     Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
-#
-#     Q = np.divide(Q_upper, Q_lower)
-#     Other_Q = 1-Q
-#
-#     x[0:2] = np.multiply(y_s1, Q)
-#     x[2:4] = np.multiply(y_s2, Other_Q)
-#
-#     return x
-#
-#
-# def balance_equation_2(x: np.array) -> np.array:
-#     y_s1 = np.zeros(2)
-#     y_s2 = np.zeros(2)
-#
-#     y_s1[0] = x[0] / np.sum(x[0:2])
-#     y_s1[1] = x[1] / np.sum(x[0:2])
-#
-#     y_s2[0] = x[2] / np.sum(x[2:4])
-#     y_s2[1] = x[3] / np.sum(x[2:4])
-#
-#     Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
-#     Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
-#
-#     Q = np.divide(Q_upper, Q_lower)
-#     Other_Q = 1-Q
-#
-#
-#     x[0:2] = np.multiply(y_s1, Q)
-#     x[2:4] = np.multiply(y_s2, Other_Q)
-#
-#     return x
-#
-#
-# def balance_equation_3(x: np.array) -> np.array:
-#     y_s1 = np.zeros(2)
-#     y_s2 = np.zeros(2)
-#
-#     y_s1[0] = x[0] / np.sum(x[0:2])
-#     y_s1[1] = x[1] / np.sum(x[0:2])
-#
-#     y_s2[0] = x[2] / np.sum(x[2:4])
-#     y_s2[1] = x[3] / np.sum(x[2:4])
-#
-#     Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
-#     Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
-#
-#     Q = np.divide(Q_upper, Q_lower)
-#     Other_Q = 1-Q
-#
-#
-#     x[0:2] = np.multiply(y_s1, Q)
-#     x[2:4] = np.multiply(y_s2, Other_Q)
-#
-#     return x
-#
-#
-# def balance_equation_4(x: np.array) -> np.array:
-#     y_s1 = np.zeros(2)
-#     y_s2 = np.zeros(2)
-#
-#     y_s1[0] = x[0] / np.sum(x[0:2])
-#     y_s1[1] = x[1] / np.sum(x[0:2])
-#
-#     y_s2[0] = x[2] / np.sum(x[2:4])
-#     y_s2[1] = x[3] / np.sum(x[2:4])
-#
-#     Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
-#     Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
-#
-#     Q = np.divide(Q_upper, Q_lower)
-#     Other_Q = 1-Q
-#
-#
-#     x[0:2] = np.multiply(y_s1, Q)
-#     x[2:4] = np.multiply(y_s2, Other_Q)
-#
-#     return x
-#
-#
+
+def balance_equation_1(x: np.array) -> np.array:
+
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
+
+
+def balance_equation_2(x: np.array) -> np.array:
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 0]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
+
+
+def balance_equation_3(x: np.array) -> np.array:
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 0])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
+
+
+def balance_equation_4(x: np.array) -> np.array:
+    y_s1 = np.zeros(2)
+    y_s2 = np.zeros(2)
+
+    y_s1[0] = x[0] / np.sum(x[0:2])
+    y_s1[1] = x[1] / np.sum(x[0:2])
+
+    y_s2[0] = x[2] / np.sum(x[2:4])
+    y_s2[1] = x[3] / np.sum(x[2:4])
+
+    Q_upper = np.dot(y_s2, trans_prob_s2[0:2, 1])
+    Q_lower = np.dot(y_s1, trans_prob_s1[0:2, 1]) + Q_upper
+
+    Q = np.divide(Q_upper, Q_lower)
+    Other_Q = 1-Q
+
+    x[0:2] = np.multiply(y_s1, Q)
+    x[2:4] = np.multiply(y_s2, Other_Q)
+
+    return x
+
+
 # def fd_eq1(x):
 #     print("Placeholder")
 #
@@ -361,38 +357,44 @@ maximin_p2_typei_fd()
 # def fd_eq4(x):
 #     print("Placeholder")
 #
-#
-# def threat_point_type_ii(x):
-#
-#     print("initialized x", x)
-#     print("Sum of initialized x", np.sum(x))
-#     x_uu = balance_equation_1(x)
-#
-#     res_p2_s1 = np.dot(payoffs_p1, x_uu[0:2])
-#     res_p2_s2 = np.dot(payoffs_p1_s2, x_uu[2:4])
-#
-#     up_up = res_p2_s1[0] + res_p2_s2[0]
-#
-#     x_ud = balance_equation_2(x)
-#
-#     res_p2_s1 = np.dot(payoffs_p1, x_ud[0:2])
-#     res_p2_s2 = np.dot(payoffs_p1_s2, x_ud[2:4])
-#
-#     up_down = res_p2_s1[0] + res_p2_s2[1]
-#
-#     x_du = balance_equation_3(x)
-#
-#     res_p2_s1 = np.dot(payoffs_p1, x_du[0:2])
-#     res_p2_s2 = np.dot(payoffs_p1_s2, x_du[2:4])
-#
-#     down_up = res_p2_s1[1] + res_p2_s2[0]
-#
-#     x_dd = balance_equation_4(x)
-#
-#     res_p2_s1 = np.dot(payoffs_p1, x_dd[0:2])
-#     res_p2_s2 = np.dot(payoffs_p1_s2, x_dd[2:4])
-#
-#     down_down = res_p2_s1[1] + res_p2_s2[1]
-#
-#     return np.max([up_up, up_down, down_up, down_down])
-#
+
+def threat_point_type_ii(x):
+
+    print("initialized x", x)
+    print("Sum of initialized x", np.sum(x))
+    x_uu = balance_equation_1(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_uu[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_uu[2:4])
+
+    up_up = res_p2_s1[0] + res_p2_s2[0]
+
+    x_ud = balance_equation_2(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_ud[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_ud[2:4])
+
+    up_down = res_p2_s1[0] + res_p2_s2[1]
+
+    x_du = balance_equation_3(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_du[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_du[2:4])
+
+    down_up = res_p2_s1[1] + res_p2_s2[0]
+
+    x_dd = balance_equation_4(x)
+
+    res_p2_s1 = np.dot(payoffs_p1, x_dd[0:2])
+    res_p2_s2 = np.dot(payoffs_p1_s2, x_dd[2:4])
+
+    down_down = res_p2_s1[1] + res_p2_s2[1]
+
+    print([up_up, up_down, down_up, down_down])
+
+    return np.max([up_up, up_down, down_up, down_down])
+
+fd_p1 = minimize(threat_point_type_ii, x_typeii, bounds=bnds_typeii, constraints=con, options={'disp': False,
+                                                                                                'ftol': 1e-25,
+                                                                                                'eps': 0.01,
+                                                                                                'maxiter': 100})
