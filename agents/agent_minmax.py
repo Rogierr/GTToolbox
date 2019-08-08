@@ -11,12 +11,16 @@ game = np.array([[7, 3], [2, 2]])
 class Alice(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
+        self.bind('PUSH', alias='result')
 
     def hello(self, name):
         self.send('main', 'Hello, %s!' % name)
 
     def custom_log(self, message):
         self.log_info('Received a message: %s' % message)
+
+    def store_result(self, result):
+        self.strategy_other = result
 
     def define_individual_rational_strategy(self):
         best_resp_p1 = game.argmax(0)  # look for maximal values in columns, return index value
@@ -67,20 +71,34 @@ class Alice(Agent):
                         if column_max == value_found:  # and last but not least execute if value found is column maximum
                             self.strategy = index_row_column[0]
 
-    def play_strategy(self):
+    def print_strategy(self):
         row_number = str(int(self.strategy+1)) + str("th")
 
         self.send('main', 'Alice will play the %s row' % row_number)
 
+    def play_strategy(self):
+        row_number = self.strategy
+
+        self.send('result', row_number)
+
+    def print_result(self):
+        self.result = game[self.strategy, self.strategy_other]
+
+        self.log_info("I received a payoff of %s" % str(self.result))
+
 class Bob(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
+        self.bind('PUSH', alias='result')
 
     def hello(self, name):
         self.send('main', 'Hello, %s!' % name)
 
     def custom_log(self, message):
         self.log_info('Received: %s' % message)
+
+    def store_result(self, result):
+        self.strategy_other = result
 
     def define_individual_rational_strategy(self):
         best_resp_p1 = game.argmax(0)  # look for maximal values in columns, return index value
@@ -132,10 +150,20 @@ class Bob(Agent):
                             self.strategy = index_row_column[0]
 
 
-    def play_strategy(self):
+    def print_strategy(self):
         column_number = str(int(self.strategy+1)) + str("th")
 
         self.send('main', 'Bob will play the %s column' % column_number)
+
+    def play_strategy(self):
+        column_number = self.strategy
+
+        self.send('result', column_number)
+
+    def print_result(self):
+        self.result = game[self.strategy_other, self.strategy]
+
+        self.log_info("I received a payoff of %s" % str(-self.result))
 
 if __name__ == '__main__':
 
@@ -146,15 +174,24 @@ if __name__ == '__main__':
     alice.connect(bob.addr('main'), handler='custom_log')
     bob.connect(alice.addr('main'), handler='custom_log')
 
+    alice.connect(bob.addr('result'), handler='store_result')
+    bob.connect(alice.addr('result'), handler='store_result')
+
+
     alice.hello('Bob')
     time.sleep(2)
     bob.hello('Alice')
     time.sleep(2)
 
     alice.define_individual_rational_strategy()
+    alice.print_strategy()
     alice.play_strategy()
 
     bob.define_individual_rational_strategy()
+    bob.print_strategy()
     bob.play_strategy()
+
+    alice.print_result()
+    bob.print_result()
 
     ns.shutdown()
