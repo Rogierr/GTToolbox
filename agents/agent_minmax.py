@@ -1,6 +1,5 @@
 import time
 import numpy as np
-# import random
 from osbrain import run_nameserver
 from osbrain import run_agent
 from osbrain import Agent
