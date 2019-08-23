@@ -394,7 +394,7 @@ def threat_point_type_ii(x):
 
     return np.max([up_up, up_down, down_up, down_down])
 
-fd_p1 = minimize(threat_point_type_ii, x_typeii, bounds=bnds_typeii, constraints=con, options={'disp': False,
+fd_p1 = minimize(threat_point_type_ii, x_typeii, bounds=bnds_typeii, constraints=con, options={ 'disp': False,
                                                                                                 'ftol': 1e-25,
                                                                                                 'eps': 0.01,
                                                                                                 'maxiter': 100})
