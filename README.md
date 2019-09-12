@@ -12,4 +12,6 @@ On Stochastic Fishery Games with Endogenous Stage-Payoffs and Transition Probabi
 Also a MSc. thesis on the threat point algorithm is written
 (https://essay.utwente.nl/77278/)
 
+The latest publication (WIP) is a paper on rarity value in combination with hysterisis in a stochastic fishery game (https://research.utwente.nl/en/publications/strong-rarity-value-in-view-of-hysteresis-in-a-stochastic-fishery)
+
 The main programmer of this toolbox is Rogier Harmelink, please contact him on r.l.a.harmelink@utwente.nl for questions regarding this toolbox.
