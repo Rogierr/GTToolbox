@@ -9,16 +9,31 @@ game = np.array([[7, 3], [2, 2]])
 
 class Alice(Agent):
     def on_init(self):
+        """
+        Initialize the agent including two messages that the agent is able to send
+        Main and result messages are pushed.
+        :return: Initialized agent
+        """
         self.bind('PUSH', alias='main')
         self.bind('PUSH', alias='result')
 
     def hello(self, name):
+        """
+        A function that sends a hello message over the main push message.
+        :param name: The name of the person that is greeted
+        :return: Send a hello message
+        """
         self.send('main', 'Hello, %s!' % name)
 
     def custom_log(self, message):
         self.log_info('Received a message: %s' % message)
 
     def store_result(self, result):
+        """
+        ALice stores the result of the other player
+        :param result: The result of the other player
+        :return: Empty
+        """
         self.strategy_other = result
 
     def define_individual_rational_strategy(self):
@@ -87,13 +102,28 @@ class Alice(Agent):
 
 class Bob(Agent):
     def on_init(self):
+        """
+        Initialize the agent including two messages that the agent is able to send
+        Main and result messages are pushed.
+        :return: Initialized agent
+        """
         self.bind('PUSH', alias='main')
         self.bind('PUSH', alias='result')
 
     def hello(self, name):
+        """
+        A function that sends a hello message over the main push message.
+        :param name: The name of the person that is greeted
+        :return: Send a hello message
+        """
         self.send('main', 'Hello, %s!' % name)
 
     def custom_log(self, message):
+        """
+        The log that prints the message to the screen and states that something has been received.
+        :param message:
+        :return:
+        """
         self.log_info('Received: %s' % message)
 
     def store_result(self, result):
@@ -149,6 +179,10 @@ class Bob(Agent):
                             self.strategy = index_row_column[0]
 
     def print_strategy(self):
+        """
+        Print the strategy of the player Bob, sends this as a class linked to the player
+        :return: Nothing
+        """
         column_number = str(int(self.strategy+1)) + str("th")
 
         self.send('main', 'Bob will play the %s column' % column_number)

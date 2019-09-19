@@ -120,9 +120,9 @@ class Mediator(Agent):
     def receive_strategy_bob(self, strategy_bob):
         self.bob_played = strategy_bob
 
-    def ask_strategy(self):
-        self.send('Alice_general', 'Please state your strategy Alice')
-        self.send('Bob_general', 'Please state your strategy Bob')
+    def ask_action(self):
+        self.send('Alice_general', 'Please state your action Alice')
+        self.send('Bob_general', 'Please state your action Bob')
 
     def compute_result(self, round_number):
         result_p1 = game_p1[self.alice_played, self.bob_played]
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     for i in np.arange(0, 100):
         print("")
         print("NEW ROUND, ROUND NUMBER:", i+1)
-        mediator.ask_strategy()
+        mediator.ask_action()
         time.sleep(0.5)
         alice.random_strategy()
         bob.tit_for_tat_strategy(i+1)
