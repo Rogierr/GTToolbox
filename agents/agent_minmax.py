@@ -1,10 +1,11 @@
+# here below, we import all the packages necessary
 import time
 import numpy as np
 from osbrain import run_nameserver
 from osbrain import run_agent
 from osbrain import Agent
 
-game = np.array([[7, 3], [2, 2]])
+game = np.array([[7, 3], [2, 2]])   # the game, defined as a numpy array
 
 
 class Alice(Agent):
@@ -37,6 +38,11 @@ class Alice(Agent):
         self.strategy_other = result
 
     def define_individual_rational_strategy(self):
+        """
+        This function defines the individual rational strategy for a player (the Nash strategy). It is only able to
+        compute pure Nash equilibria
+        :return: Does not return anything, but stores the pure Nash strategy for player 1
+        """
         best_resp_p1 = game.argmax(0)  # look for maximal values in columns, return index value
         best_resp_p2 = game.argmin(1)  # look for minimal values in the rows, return index value
 
@@ -86,9 +92,13 @@ class Alice(Agent):
                             self.strategy = index_row_column[0]
 
     def print_strategy(self):
-        row_number = str(int(self.strategy+1)) + str("th")
+        """
+        This functions prints the strategy as a message within the MAS
+        :return: Empty
+        """
+        row_number = str(int(self.strategy+1)) + str("th")  # set the rom to be played as a string message
 
-        self.send('main', 'Alice will play the %s row' % row_number)
+        self.send('main', 'Alice will play the %s row' % row_number)    # send the message
 
     def play_strategy(self):
         row_number = self.strategy
@@ -197,33 +207,41 @@ class Bob(Agent):
 
         self.log_info("I received a payoff of %s" % str(-self.result))
 
-
+# here below is the execution of the main function
 if __name__ == '__main__':
 
+    # we create a server with two agents
     ns = run_nameserver()
     alice = run_agent('Alice', base=Alice)
     bob = run_agent('Bob', base=Bob)
 
+    # connect the agents to each other for regular messages
     alice.connect(bob.addr('main'), handler='custom_log')
     bob.connect(alice.addr('main'), handler='custom_log')
 
+    # connect the agents in order to send the strategies they play
     alice.connect(bob.addr('result'), handler='store_result')
     bob.connect(alice.addr('result'), handler='store_result')
 
+    # in the below loop we just say hi :)
     alice.hello('Bob')
     time.sleep(2)
     bob.hello('Alice')
     time.sleep(2)
 
+    # define the nash strategy for alice and play it
     alice.define_individual_rational_strategy()
     alice.print_strategy()
     alice.play_strategy()
 
+    # define the nash strategy for bob and play it
     bob.define_individual_rational_strategy()
     bob.print_strategy()
     bob.play_strategy()
 
+
+    # print the results for alice and bob
     alice.print_result()
     bob.print_result()
 
-    ns.shutdown()
+    ns.shutdown()   # shutdown the whole MAS
