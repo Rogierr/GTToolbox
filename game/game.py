@@ -160,3 +160,18 @@ class ETPGame:
 
     def compute_try_out(self, points, iter):
         tp.mixed_strategy_try_out(self, points, iter)
+
+
+class TypeICTP:
+
+    def __init__(self, payoff_p1, payoff_p2):
+
+        self.payoff_p1 = payoff_p1
+        self.payoff_p2 = payoff_p2
+
+        self.FD = False
+        self.FD_function_use = "FD"
+        self.mu = False
+        self.plotting_rarity = False
+        self.rarity = False
+        self.m = 0.05
