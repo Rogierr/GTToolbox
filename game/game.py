@@ -164,7 +164,7 @@ class ETPGame:
 
 class TypeICTP:
 
-    def __init__(self, payoff_p1, payoff_p2):
+    def __init__(self, payoff_p1, payoff_p2, m):
 
         self.payoff_p1 = payoff_p1
         self.payoff_p2 = payoff_p2
@@ -174,4 +174,4 @@ class TypeICTP:
         self.mu = False
         self.plotting_rarity = False
         self.rarity = False
-        self.m = 0.05
+        self.m = m
