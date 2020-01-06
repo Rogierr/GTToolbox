@@ -55,36 +55,6 @@ def plot_all_rewards(self, points, k):
 
     draw_payoffs = random_strategy_draw(points, self.total_payoffs)
 
-    print("Payoffs before adjustment of balance equation")
-
-    print("Minimal x0", np.min(draw_payoffs[:, 0]))
-    print("Minimal x1", np.min(draw_payoffs[:, 1]))
-    print("Minimal x2", np.min(draw_payoffs[:, 2]))
-    print("Minimal x3", np.min(draw_payoffs[:, 3]))
-    print("Minimal x4", np.min(draw_payoffs[:, 4]))
-    print("Minimal x5", np.min(draw_payoffs[:, 5]))
-    print("Minimal x6", np.min(draw_payoffs[:, 6]))
-    print("Minimal x7", np.min(draw_payoffs[:, 7]))
-
-    print("Minimal over state 1", np.min(draw_payoffs[:, 0:4]))
-    print("Minimal over state 2", np.min(draw_payoffs[:, 4:8]))
-
-    print("")
-    print("Maximal x0", np.max(draw_payoffs[:, 0]))
-    print("Maximal x1", np.max(draw_payoffs[:, 1]))
-    print("Maximal x2", np.max(draw_payoffs[:, 2]))
-    print("Maximal x3", np.max(draw_payoffs[:, 3]))
-    print("Maximal x4", np.max(draw_payoffs[:, 4]))
-    print("Maximal x5", np.max(draw_payoffs[:, 5]))
-    print("Maximal x6", np.max(draw_payoffs[:, 6]))
-    print("Maximal x7", np.max(draw_payoffs[:, 7]))
-
-    print("Maximal over state 1", np.max(draw_payoffs[:, 0:4]))
-    print("Maximal over state 2", np.max(draw_payoffs[:, 4:8]))
-
-    print("")
-    print("")
-
     ## Calculate the balance equations
 
     draw_payoffs = balance_equation_all(self, points, draw_payoffs)

@@ -2,6 +2,19 @@ import numpy as np
 import plotting as game_plot
 import threat_point as tp
 
+class RepeatedGame:
+    """The Repeated Game Class represents the repeated games from the thesis, with or without ESP"""
+
+    def __init__(self, payoff_p1, payoff_p2):
+
+        self.payoff_p1 = payoff_p1
+        self.payoff_p2 = payoff_p2
+
+    def activate_fd(self):
+        print("Game is now an ESP game")
+
+        self.FD = True
+
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""
