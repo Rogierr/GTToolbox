@@ -1,4 +1,5 @@
 import numpy as np
+from FD_functions.learning_curves import scurve
 
 def mu_function(self, rho):
 
@@ -11,3 +12,13 @@ def mu_function(self, rho):
     mu = rho
 
     return mu
+
+
+def tanh_mu(phi, x):
+
+    return phi+np.tanh((3*x))
+
+
+def scurve_mu(phi, x):
+
+    return phi+scurve(x)

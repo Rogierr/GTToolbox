@@ -7,14 +7,35 @@ class RepeatedGame:
 
     def __init__(self, payoff_p1, payoff_p2):
 
-        self.payoff_p1 = payoff_p1
-        self.payoff_p2 = payoff_p2
+        self.payoff_p1 = payoff_p1.A1
+        self.payoff_p2 = payoff_p2.A1
+        self.class_games = 'Repeated'
+        self.FD = False
+        self.rarity = False
+        self.plotting_rarity = False
+        self.learning_curve = False
+        self.mu_function = False
+        self.phi = 1
 
-    def activate_fd(self):
-        print("Game is now an ESP game")
+        self.total_payoffs = self.payoff_p1.size
 
-        self.FD = True
+    def define_learning_curve(self, curve):
 
+        self.learning_curve = curve
+
+    def define_mu(self, mu):
+
+        self.mu_function = mu
+
+    def set_phi(self, phi):
+        if self.FD:
+            self.phi = phi
+
+        else:
+            print("FD is not activated, therefore you cannot set a phi")
+
+    def plot_all_rewards(self, points, title):
+        game_plot.plot_all_rewards(self, points, title)
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""
@@ -86,6 +107,7 @@ class ETPGame:
         self.printing = False  # set printing to False
         self.phi = 0
         self.m = 0
+        self.class_games = 'ETP'
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
@@ -150,8 +172,8 @@ class ETPGame:
 
     # below this line we incorporate some functions within the class
 
-    def plot_all_rewards(self, points, k):
-        game_plot.plot_all_rewards(self, points, k)
+    def plot_all_rewards(self, points, title):
+        game_plot.plot_all_rewards(self, points, title)
 
     def plot_convex_hull_pure_rewards(self):
         game_plot.plot_convex_hull_pure_rewards(self)

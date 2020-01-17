@@ -6,9 +6,11 @@ import matplotlib.pyplot as plt  # import package to plot stuff
 from computation.balance_equation_all import balance_equation_all
 from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
-from FD_functions.mu_function import mu_function
+from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
+from FD_functions.sb_function import sb_function_p1, sb_function_p2
+from FD_functions.mb_function import mb_function_p1, mb_function_p2
 
 __all__ = ['plot_convex_hull_pure_rewards', 'plot_single_period_pure_rewards', 'plot_all_rewards']
 
@@ -46,7 +48,7 @@ def plot_single_period_pure_rewards(self):
     plt.show()
 
 
-def plot_all_rewards(self, points, k):
+def plot_all_rewards(self, points, title):
     print("Now plotting all rewards")
 
     start_time = time.time()  # timer start
@@ -57,7 +59,8 @@ def plot_all_rewards(self, points, k):
 
     ## Calculate the balance equations
 
-    draw_payoffs = balance_equation_all(self, points, draw_payoffs)
+    if self.class_games == 'ETP':
+        draw_payoffs = balance_equation_all(self, points, draw_payoffs)
 
     # End of balance equations
 
@@ -71,36 +74,28 @@ def plot_all_rewards(self, points, k):
             fd = mu_function(self, rho_function(draw_payoffs))
             # mu_indic = np.where(fd < 0.06)
 
+    if self.learning_curve == 'tanh':
+        if self.mu_function == 'sb':
+            fd_p1 = tanh_mu(self.phi, sb_function_p1(draw_payoffs))
+            fd_p2 = tanh_mu(self.phi, sb_function_p2(draw_payoffs))
+        elif self.mu_function == 'mb':
+            fd_p1 = tanh_mu(self.phi, mb_function_p1(draw_payoffs))
+            fd_p2 = tanh_mu(self.phi, mb_function_p2(draw_payoffs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
-    print("Payoffs after adjustment of balance equation")
+    elif self.learning_curve == 'scurve':
+        if self.mu_function == 'sb':
+            fd_p1 = scurve_mu(self.phi, sb_function_p1(draw_payoffs))
+            fd_p2 = scurve_mu(self.phi, sb_function_p2(draw_payoffs))
+        elif self.mu_function == 'mb':
+            fd_p1 = scurve_mu(self.phi, mb_function_p1(draw_payoffs))
+            fd_p2 = scurve_mu(self.phi, mb_function_p2(draw_payoffs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
-    print("Minimal x0", np.min(draw_payoffs[:, 0]))
-    print("Minimal x1", np.min(draw_payoffs[:, 1]))
-    print("Minimal x2", np.min(draw_payoffs[:, 2]))
-    print("Minimal x3", np.min(draw_payoffs[:, 3]))
-    print("Minimal x4", np.min(draw_payoffs[:, 4]))
-    print("Minimal x5", np.min(draw_payoffs[:, 5]))
-    print("Minimal x6", np.min(draw_payoffs[:, 6]))
-    print("Minimal x7", np.min(draw_payoffs[:, 7]))
-
-    print("Minimal over state 1", np.min(draw_payoffs[:, 0:4]))
-    print("Minimal over state 2", np.min(draw_payoffs[:, 4:8]))
-
-    print("")
-    print("Maximal x0", np.max(draw_payoffs[:, 0]))
-    print("Maximal x1", np.max(draw_payoffs[:, 1]))
-    print("Maximal x2", np.max(draw_payoffs[:, 2]))
-    print("Maximal x3", np.max(draw_payoffs[:, 3]))
-    print("Maximal x4", np.max(draw_payoffs[:, 4]))
-    print("Maximal x5", np.max(draw_payoffs[:, 5]))
-    print("Maximal x6", np.max(draw_payoffs[:, 6]))
-    print("Maximal x7", np.max(draw_payoffs[:, 7]))
-
-    print("Maximal over state 1", np.max(draw_payoffs[:, 0:4]))
-    print("Maximal over state 2", np.max(draw_payoffs[:, 4:8]))
-
-    print("")
-    print("")
+    elif not self.learning_curve == False:
+        raise NameError("Not a learning curve provided to the system")
 
     payoffs_p1 = np.sum(np.multiply(draw_payoffs, self.payoff_p1), axis=1)
     payoffs_p2 = np.sum(np.multiply(draw_payoffs, self.payoff_p2), axis=1)
@@ -116,10 +111,12 @@ def plot_all_rewards(self, points, k):
         payoffs_p1 = np.multiply(fd, payoffs_p1)
         payoffs_p2 = np.multiply(fd, payoffs_p2)
 
-    # here below we just randomly throw out some stuff
+    if not self.learning_curve == False and not self.mu_function == False:
+        payoffs_p1 = np.multiply(fd_p1, payoffs_p1)
+        payoffs_p2 = np.multiply(fd_p2, payoffs_p2)
 
-    # payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
-    # payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
+
+    # here below we just randomly throw out some stuff
 
 
     delete_indic = np.where(np.isnan(payoffs_p1))
@@ -137,24 +134,13 @@ def plot_all_rewards(self, points, k):
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
     plt.figure()
-    plt.title("Small Fish Wars with Hysteresis")
+    plt.title(title)
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
     plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
 
-    # plt.figtext(0, 0,'With hysteresis phi at: ' + str(self.phi))
-    # plt.figtext(0, -0.05,'And m at: ' + str(self.m))
-    # plt.figtext(0, -0.1,'Minimal rewards: ' + str(self.minimal_payoffs))
-    # plt.figtext(0, -0.15,'Maximal rewards: ' + str(self.maximal_payoffs))
     plt.axis('equal')
-    # plt.xlim(-6, 20)
-    # plt.ylim(-6, 20)
-    # plt.scatter(12.57, 12.57, color='yellow', label=r'$x^{sus}$')
-    # plt.scatter(6.5, 6.5, color='r', label=r'$x^{nr}$')
-    # plt.legend()
-    plt.savefig('figures/m = 1, phi = 1.5, with x_sus and x_nr.png', dpi=300, bbox_inches="tight")
-    # plt.savefig('figures/without_convex_%d.png'%k, dpi=300, bbox_inches="tight")
-    # plt.show()
+    plt.show()
 
 
     # plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
