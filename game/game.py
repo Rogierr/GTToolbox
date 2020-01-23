@@ -28,14 +28,13 @@ class RepeatedGame:
         self.mu_function = mu
 
     def set_phi(self, phi):
-        if self.FD:
-            self.phi = phi
 
-        else:
-            print("FD is not activated, therefore you cannot set a phi")
+        self.phi = phi
 
     def plot_all_rewards(self, points, title):
         game_plot.plot_all_rewards(self, points, title)
+
+    def compute_threat_point(self):
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""

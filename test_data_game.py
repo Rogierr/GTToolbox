@@ -16,41 +16,43 @@ p2_payoff_SH = np.matrix('8 6; 3 4')
 
 Stag_Hunt = RepeatedGame(p1_payoff_SH, p2_payoff_SH)
 
-Prisoners_Dilemma.plot_all_rewards(1000000, "Prisoners Dilemma - Data Dilemma")
-Stag_Hunt.plot_all_rewards(1000000, "Stag Hunt - Data Dilemma")
+Prisoners_Dilemma.plot_all_rewards(points, "Prisoners Dilemma - Data Dilemma")
+Stag_Hunt.plot_all_rewards(points, "Stag Hunt - Data Dilemma")
 
-Prisoners_Dilemma.define_learning_curve('tanh')
-Prisoners_Dilemma.define_mu('sb')
-Prisoners_Dilemma.plot_all_rewards(100000, 'Tanh Prisoners Dilemma SB')
+for i in range(0, 3):
+    Prisoners_Dilemma.set_phi(i*0.5+0)
+    Prisoners_Dilemma.define_learning_curve('tanh')
+    Prisoners_Dilemma.define_mu('sb')
+    Prisoners_Dilemma.plot_all_rewards(points, 'Tanh Prisoners Dilemma SB')
 
-Prisoners_Dilemma.define_learning_curve('tanh')
-Prisoners_Dilemma.define_mu('mb')
-Prisoners_Dilemma.plot_all_rewards(100000, 'Tanh Prisoners Dilemma MB')
+    Prisoners_Dilemma.define_learning_curve('tanh')
+    Prisoners_Dilemma.define_mu('mb')
+    Prisoners_Dilemma.plot_all_rewards(points, 'Tanh Prisoners Dilemma MB')
 
-Prisoners_Dilemma.define_learning_curve('scurve')
-Prisoners_Dilemma.define_mu('sb')
-Prisoners_Dilemma.plot_all_rewards(100000, 'Scurve Prisoners Dilemma SB')
+    Prisoners_Dilemma.define_learning_curve('scurve')
+    Prisoners_Dilemma.define_mu('sb')
+    Prisoners_Dilemma.plot_all_rewards(points, 'Scurve Prisoners Dilemma SB')
 
-Prisoners_Dilemma.define_learning_curve('scurve')
-Prisoners_Dilemma.define_mu('mb')
-Prisoners_Dilemma.plot_all_rewards(100000, 'Scurve Prisoners Dilemma MB')
+    Prisoners_Dilemma.define_learning_curve('scurve')
+    Prisoners_Dilemma.define_mu('mb')
+    Prisoners_Dilemma.plot_all_rewards(points, 'Scurve Prisoners Dilemma MB')
 
 
-Stag_Hunt.define_learning_curve('tanh')
-Stag_Hunt.define_mu('sb')
-Stag_Hunt.plot_all_rewards(100000, 'Tanh Stag Hunt SB')
+    Stag_Hunt.define_learning_curve('tanh')
+    Stag_Hunt.define_mu('sb')
+    Stag_Hunt.plot_all_rewards(points, 'Tanh Stag Hunt SB')
 
-Stag_Hunt.define_learning_curve('tanh')
-Stag_Hunt.define_mu('mb')
-Stag_Hunt.plot_all_rewards(100000, 'Tanh Stag Hunt MB')
+    Stag_Hunt.define_learning_curve('tanh')
+    Stag_Hunt.define_mu('mb')
+    Stag_Hunt.plot_all_rewards(points, 'Tanh Stag Hunt MB')
 
-Stag_Hunt.define_learning_curve('scurve')
-Stag_Hunt.define_mu('sb')
-Stag_Hunt.plot_all_rewards(100000, 'Scurve Stag Hunt SB')
+    Stag_Hunt.define_learning_curve('scurve')
+    Stag_Hunt.define_mu('sb')
+    Stag_Hunt.plot_all_rewards(points, 'Scurve Stag Hunt SB')
 
-Stag_Hunt.define_learning_curve('scurve')
-Stag_Hunt.define_mu('mb')
-Stag_Hunt.plot_all_rewards(100000, 'Scurve Stag Hunt MB')
+    Stag_Hunt.define_learning_curve('scurve')
+    Stag_Hunt.define_mu('mb')
+    Stag_Hunt.plot_all_rewards(points, 'Scurve Stag Hunt MB')
 
 # ## BELOW THIS LINE WE FOCUS ON THREAT POINT COMPUTATIONS
 #
