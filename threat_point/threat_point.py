@@ -73,12 +73,11 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    print(payoffs)
-
     if self.class_games == 'ETP':
         max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p1_game1.shape[0] * self.payoff_p1_game2.shape[0]))
     else:
         max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p1_actions)
+
     # sort the payoffs
     nan_delete = np.where(np.isnan(max_payoffs))  # delete payoffs which are a NaN
 
@@ -108,7 +107,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         print("Seconds done to generate", points, "points", end_time - start_time)
         print("")
 
-    # End of algorithm player 1
+    # End of algorithm player 1 (checked)
 
     # Start of algorithm player 2
 
@@ -152,9 +151,8 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         elif not self.mu_function == False:
             raise NameError("Not the correct type of mu function provided")
 
-        # payoffs are calculated
+    # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)
-
     if self.rarity:
         payoffs = np.multiply(fd, payoffs)
         payoffs = np.multiply(profit_function(fd), payoffs)
@@ -164,7 +162,11 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p2_game1.shape[1] * self.payoff_p2_game2.shape[1]))
+    if self.class_games == 'ETP':
+        max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p2_game1.shape[1] * self.payoff_p2_game2.shape[1]))
+    else:
+        max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p2_actions)
+
     # awesome sorting process
     nan_delete = np.where(np.isnan(max_payoffs))  # look for NaN's
 

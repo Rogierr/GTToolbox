@@ -23,6 +23,7 @@ class RepeatedGame:
         self.payoff_p2_actions = payoff_p2.shape[1]
 
         self.payoff_p1_game1 = self.payoff_p1
+        self.payoff_p2_game1 = self.payoff_p2
 
         self.best_pure_strategies = np.array([[1, 0], [0, 1]])
 
@@ -43,6 +44,9 @@ class RepeatedGame:
 
     def compute_threat_point(self, points, show_strat_p1, show_strat_p2, print_text=True):
         tp.threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text)
+
+    def compute_maximin(self, points, show_strat_p1, show_strat_p2):
+        tp.optimized_maximin(self, points, show_strat_p1, show_strat_p2)
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""

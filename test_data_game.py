@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from computation.random_strategy_draw import random_strategy_draw
 from game.game import RepeatedGame
+from FD_functions.learning_curves import scurve
 
 points = 2500000
 
@@ -23,43 +24,61 @@ for i in range(0, 1):
     Prisoners_Dilemma.set_phi(i*0.5+0)
     Prisoners_Dilemma.define_learning_curve('tanh')
     Prisoners_Dilemma.define_mu('sb')
-    Prisoners_Dilemma.plot_all_rewards(points, 'Tanh Prisoners Dilemma SB')
-    Prisoners_Dilemma.compute_threat_point(3, True, True, True)
+    # Prisoners_Dilemma.plot_all_rewards(points, 'Tanh Prisoners Dilemma SB')
+    print("Threat point PD tanh sb")
+    Prisoners_Dilemma.compute_threat_point(100000, True, True, True)
+    # Prisoners_Dilemma.compute_maximin(5, True, True)
 
-    # Prisoners_Dilemma.define_learning_curve('tanh')
-    # Prisoners_Dilemma.define_mu('mb')
+    Prisoners_Dilemma.define_learning_curve('tanh')
+    Prisoners_Dilemma.define_mu('mb')
     # Prisoners_Dilemma.plot_all_rewards(points, 'Tanh Prisoners Dilemma MB')
-    #
-    # Prisoners_Dilemma.define_learning_curve('scurve')
-    # Prisoners_Dilemma.define_mu('sb')
+    print("Threat point PD tanh MB")
+    Prisoners_Dilemma.compute_threat_point(100000, True, True, True)
+    # Prisoners_Dilemma.compute_maximin(100000, True, True)
+
+    Prisoners_Dilemma.define_learning_curve('scurve')
+    Prisoners_Dilemma.define_mu('sb')
     # Prisoners_Dilemma.plot_all_rewards(points, 'Scurve Prisoners Dilemma SB')
-    #
-    # Prisoners_Dilemma.define_learning_curve('scurve')
-    # Prisoners_Dilemma.define_mu('mb')
+    print("Threat point PD scurve SB")
+    Prisoners_Dilemma.compute_threat_point(100000, True, True, True)
+
+    Prisoners_Dilemma.define_learning_curve('scurve')
+    Prisoners_Dilemma.define_mu('mb')
     # Prisoners_Dilemma.plot_all_rewards(points, 'Scurve Prisoners Dilemma MB')
-    #
-    #
-    # Stag_Hunt.define_learning_curve('tanh')
-    # Stag_Hunt.define_mu('sb')
+    print("Threat point PD scurve MB")
+    Prisoners_Dilemma.compute_threat_point(100000, True, True, True)
+
+
+    Stag_Hunt.define_learning_curve('tanh')
+    Stag_Hunt.define_mu('sb')
     # Stag_Hunt.plot_all_rewards(points, 'Tanh Stag Hunt SB')
-    #
-    # Stag_Hunt.define_learning_curve('tanh')
-    # Stag_Hunt.define_mu('mb')
+    print("Threat point SH tanh SB")
+    Stag_Hunt.compute_threat_point(100000, True, True, True)
+
+    Stag_Hunt.define_learning_curve('tanh')
+    Stag_Hunt.define_mu('mb')
     # Stag_Hunt.plot_all_rewards(points, 'Tanh Stag Hunt MB')
-    #
-    # Stag_Hunt.define_learning_curve('scurve')
-    # Stag_Hunt.define_mu('sb')
+    print("Threat point SH tanh MB")
+    Stag_Hunt.compute_threat_point(100000, True, True, True)
+
+    Stag_Hunt.define_learning_curve('scurve')
+    Stag_Hunt.define_mu('sb')
     # Stag_Hunt.plot_all_rewards(points, 'Scurve Stag Hunt SB')
-    #
-    # Stag_Hunt.define_learning_curve('scurve')
-    # Stag_Hunt.define_mu('mb')
+    print("Threat point SH Scurve SB")
+    Stag_Hunt.compute_threat_point(100000, True, True, True)
+
+    Stag_Hunt.define_learning_curve('scurve')
+    Stag_Hunt.define_mu('mb')
     # Stag_Hunt.plot_all_rewards(points, 'Scurve Stag Hunt MB')
+    print("Threat point SH scurve MB")
+    Stag_Hunt.compute_threat_point(100000, True, True, True)
 
 ## BELOW THIS LINE WE FOCUS ON THREAT POINT COMPUTATIONS
 
 # draw some random strategies
 points_threat = 200000
 threat_strategy = random_strategy_draw(points_threat, 2)
+phi = 0
 
 # convert these strategies into best reply matrices
 p1_br_up_MB = threat_strategy[:, 0] + float(2 / 3) * threat_strategy[:, 1]
@@ -252,8 +271,8 @@ TPResult_p2_PD_scurve_MB = np.min(np.max(threat_point_p2_PD_scurve_MB, axis=1), 
 TPResult_p1_PD_tanh_SB = np.min(np.max(threat_point_p1_PD_tanh_SB, axis=1), axis=0)
 TPResult_p2_PD_tanh_SB = np.min(np.max(threat_point_p2_PD_tanh_SB, axis=1), axis=0)
 
-TPResult_p1_PD_scurve_SB = np.min(np.max(threat_point_p1_PD_scurve_MB, axis=1), axis=0)
-TPResult_p2_PD_scurve_SB = np.min(np.max(threat_point_p2_PD_scurve_MB, axis=1), axis=0)
+TPResult_p1_PD_scurve_SB = np.min(np.max(threat_point_p1_PD_scurve_SB, axis=1), axis=0)
+TPResult_p2_PD_scurve_SB = np.min(np.max(threat_point_p2_PD_scurve_SB, axis=1), axis=0)
 
 TPResult_p1_SH_tanh_MB = np.min(np.max(threat_point_p1_SH_tanh_MB, axis=1), axis=0)
 TPResult_p2_SH_tanh_MB = np.min(np.max(threat_point_p2_SH_tanh_MB, axis=1), axis=0)
@@ -264,8 +283,17 @@ TPResult_p2_SH_scurve_MB = np.min(np.max(threat_point_p2_SH_scurve_MB, axis=1), 
 TPResult_p1_SH_tanh_SB = np.min(np.max(threat_point_p1_SH_tanh_SB, axis=1), axis=0)
 TPResult_p2_SH_tanh_SB = np.min(np.max(threat_point_p2_SH_tanh_SB, axis=1), axis=0)
 
-TPResult_p1_SH_scurve_SB = np.min(np.max(threat_point_p1_SH_scurve_MB, axis=1), axis=0)
-TPResult_p2_SH_scurve_SB = np.min(np.max(threat_point_p2_SH_scurve_MB, axis=1), axis=0)
+TPResult_p1_SH_scurve_SB = np.min(np.max(threat_point_p1_SH_scurve_SB, axis=1), axis=0)
+TPResult_p2_SH_scurve_SB = np.min(np.max(threat_point_p2_SH_scurve_SB, axis=1), axis=0)
+
+print("PD Tanh SB", [TPResult_p1_PD_tanh_SB, TPResult_p2_PD_tanh_SB])
+print("PD tanh MB", [TPResult_p1_PD_tanh_MB, TPResult_p2_PD_tanh_MB])
+print("PD Scurve SB", [TPResult_p1_PD_scurve_SB, TPResult_p2_PD_scurve_SB])
+print("PD Scurve MB", [TPResult_p1_PD_scurve_MB, TPResult_p2_PD_scurve_MB])
+print("SH tanh SB", [TPResult_p1_SH_tanh_SB, TPResult_p2_PD_tanh_SB])
+print("SH tanh MB", [TPResult_p1_SH_tanh_MB, TPResult_p2_SH_tanh_MB])
+print("SH scurve SB", [TPResult_p1_PD_scurve_SB, TPResult_p2_PD_scurve_SB])
+print("SH scurve MB", [TPResult_p1_PD_scurve_MB, TPResult_p2_PD_scurve_MB])
 
 #
 #
