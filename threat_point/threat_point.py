@@ -10,7 +10,9 @@ from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
-from FD_functions.mu_function import mu_function
+from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu
+from FD_functions.mb_function import mb_function_p1, mb_function_p2
+from FD_functions.sb_function import sb_function_p1, sb_function_p2
 
 
 __all__ = ['threat_point_optimized']
@@ -30,9 +32,10 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     frequency_pairs = frequency_pairs_p1(self, points, y_punisher)  # sort based on best reply
 
+    if self.class_games == 'ETP':
     # do the balance equations calculations
-    frequency_pairs = balance_equation(self, points, self.payoff_p1_game1.shape[0], self.payoff_p1_game2.shape[0],
-                                       self.payoff_p1_game1.size, self.total_payoffs, frequency_pairs)
+        frequency_pairs = balance_equation(self, points, self.payoff_p1_game1.shape[0], self.payoff_p1_game2.shape[0],
+                                           self.payoff_p1_game1.size, self.total_payoffs, frequency_pairs)
 
     fd = 1
 
@@ -41,6 +44,22 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         fd = fd_function(frequency_pairs)
     elif self.rarity:
         fd = mu_function(self, rho_function(frequency_pairs))
+
+    if self.learning_curve == 'tanh':
+        if self.mu_function == 'sb':
+            fd = tanh_mu(self.phi, sb_function_p1(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = tanh_mu(self.phi, mb_function_p1(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
+
+    if self.learning_curve == 'scurve':
+        if self.mu_function == 'sb':
+            fd = scurve_mu(self.phi, sb_function_p1(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = scurve_mu(self.phi, mb_function_p1(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
 
@@ -54,7 +73,12 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         payoffs = np.multiply(fd, payoffs)
         payoffs = payoffs.reshape((payoffs.size, 1))
 
-    max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p1_game1.shape[0] * self.payoff_p1_game2.shape[0]))
+    print(payoffs)
+
+    if self.class_games == 'ETP':
+        max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p1_game1.shape[0] * self.payoff_p1_game2.shape[0]))
+    else:
+        max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p1_actions)
     # sort the payoffs
     nan_delete = np.where(np.isnan(max_payoffs))  # delete payoffs which are a NaN
 
@@ -99,9 +123,10 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
     frequency_pairs = frequency_pairs_p2(self, points, self.payoff_p2_actions, self.payoff_p1_actions,
                                          x_punisher)  # sort them based on best replies
 
-    # do some balance equation accelerator magic
-    frequency_pairs = balance_equation(self, points, self.payoff_p2_game1.shape[1], self.payoff_p2_game2.shape[1],
-                                       self.payoff_p2_game1.size, self.total_payoffs, frequency_pairs)
+    if self.class_games == 'ETP':
+        # do some balance equation accelerator magic
+        frequency_pairs = balance_equation(self, points, self.payoff_p2_game1.shape[1], self.payoff_p2_game2.shape[1],
+                                           self.payoff_p2_game1.size, self.total_payoffs, frequency_pairs)
 
     fd = 1
 
@@ -110,6 +135,22 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         fd = fd_function(frequency_pairs)
     elif self.rarity:
         fd = mu_function(self, rho_function(frequency_pairs))
+
+    if self.learning_curve == 'tanh':
+        if self.mu_function == 'sb':
+            fd = tanh_mu(self.phi, sb_function_p2(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = tanh_mu(self.phi, mb_function_p2(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
+
+    if self.learning_curve == 'scurve':
+        if self.mu_function == 'sb':
+            fd = scurve_mu(self.phi, sb_function_p2(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = scurve_mu(self.phi, mb_function_p2(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
         # payoffs are calculated
     payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)

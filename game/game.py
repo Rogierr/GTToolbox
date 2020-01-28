@@ -19,6 +19,13 @@ class RepeatedGame:
 
         self.total_payoffs = self.payoff_p1.size
 
+        self.payoff_p1_actions = payoff_p1.shape[0]
+        self.payoff_p2_actions = payoff_p2.shape[1]
+
+        self.payoff_p1_game1 = self.payoff_p1
+
+        self.best_pure_strategies = np.array([[1, 0], [0, 1]])
+
     def define_learning_curve(self, curve):
 
         self.learning_curve = curve
@@ -34,7 +41,8 @@ class RepeatedGame:
     def plot_all_rewards(self, points, title):
         game_plot.plot_all_rewards(self, points, title)
 
-    def compute_threat_point(self):
+    def compute_threat_point(self, points, show_strat_p1, show_strat_p2, print_text=True):
+        tp.threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text)
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""

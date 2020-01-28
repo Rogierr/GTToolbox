@@ -8,7 +8,7 @@ def payoffs_sorted(points, payoffs, actions):
     points_range = np.arange(points)
     actions_range = np.arange(actions)
 
-    payoffs_sort = np.zeros((points, actions))  # nitialize the payoffs sort
+    payoffs_sort = np.zeros((points, actions))  # initialize the payoffs sort
 
     # sort the payoffs!
     for x in np.nditer(points_range):
