@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt  # import package to plot stuff
 
 from computation.balance_equation_all import balance_equation_all
 from computation.random_strategy_draw import random_strategy_draw
+from computation.pareto_efficiency import is_pareto_efficient_simple, is_pareto_efficient
 from FD_functions.fd_function import fd_function
-from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu
+from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu, learning_curve_mu
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
 from FD_functions.sb_function import sb_function_p1, sb_function_p2
@@ -74,6 +75,16 @@ def plot_all_rewards(self, points, title):
             fd = mu_function(self, rho_function(draw_payoffs))
             # mu_indic = np.where(fd < 0.06)
 
+    if self.learning_curve == 'learning':
+        if self.mu_function == 'sb':
+            fd_p1 = learning_curve_mu(self.phi, sb_function_p1(draw_payoffs))
+            fd_p2 = learning_curve_mu(self.phi, sb_function_p2(draw_payoffs))
+        elif self.mu_function == 'mb':
+            fd_p1 = learning_curve_mu(self.phi, mb_function_p1(draw_payoffs))
+            fd_p2 = learning_curve_mu(self.phi, mb_function_p2(draw_payoffs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
+
     if self.learning_curve == 'tanh':
         if self.mu_function == 'sb':
             fd_p1 = tanh_mu(self.phi, sb_function_p1(draw_payoffs))
@@ -94,8 +105,9 @@ def plot_all_rewards(self, points, title):
         elif not self.mu_function == False:
             raise NameError("Not the correct type of mu function provided")
 
-    elif not self.learning_curve == False:
-        raise NameError("Not a learning curve provided to the system")
+    elif self.learning_curve == False:
+        fd_p1 = 1
+        fd_p2 = 10
 
     payoffs_p1 = np.sum(np.multiply(draw_payoffs, self.payoff_p1), axis=1)
     payoffs_p2 = np.sum(np.multiply(draw_payoffs, self.payoff_p2), axis=1)
@@ -123,6 +135,15 @@ def plot_all_rewards(self, points, title):
     payoffs_p1 = np.delete(payoffs_p1, delete_indic[0], 0)
     payoffs_p2 = np.delete(payoffs_p2, delete_indic[0], 0)
 
+    combined_payoffs = np.zeros([payoffs_p1.shape[0], 2])
+    combined_payoffs[:,0] = payoffs_p1
+    combined_payoffs[:,1] = payoffs_p2
+
+    pareto_rewards = is_pareto_efficient(combined_payoffs)
+    pareto_rewards_values = combined_payoffs[np.where(pareto_rewards == True)[0]]
+
+    self.pareto_rewards = pareto_rewards_values
+
     self.maximal_payoffs = np.zeros(2)
     self.maximal_payoffs = [np.max(payoffs_p1), np.max(payoffs_p2)]
 
@@ -137,12 +158,15 @@ def plot_all_rewards(self, points, title):
     plt.title(title)
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
-    plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
+    # plt.xlim(-1, 17)
+    # plt.ylim(-1, 17)
+    plt.scatter(payoffs_p1, payoffs_p2, s=0.3, label='Rewards')
+    plt.scatter(pareto_rewards_values[:,0], pareto_rewards_values[:,1], c='g', label='Pareto efficient reward(s)')
 
-    plt.axis('equal')
-    plt.show()
+    # plt.axis('equal')
+    # plt.show()
 
-
+    # plt.savefig('figures/tanh_mb_phi_%d.png'%k, dpi=300, bbox_inches="tight")
     # plt.fill(all_payoffs[Convex_Hull_Payoffs.vertices,0],all_payoffs[Convex_Hull_Payoffs.vertices,1],color='y', zorder=5, label="Obtainable rewards")
     end_time = time.time()
     # plt.show()

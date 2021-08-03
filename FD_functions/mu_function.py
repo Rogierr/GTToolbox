@@ -22,3 +22,7 @@ def tanh_mu(phi, x):
 def scurve_mu(phi, x):
 
     return phi+scurve(x)
+
+def learning_curve_mu(phi, x):
+
+    return phi+(1.1*(1 - (0.1/(x+0.1))))

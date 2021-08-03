@@ -2,7 +2,7 @@ import imageio
 import os
 from natsort import natsorted
 
-path = 'C:\\Users\\HarmelinkRLA\\Dropbox\\Universiteit Twente\\Papers\\Rarity Value\\figures\\Verzoek Reinoud\\gifs'
+path = 'C:\\Users\\HarmelinkRLA\\PycharmProjects\\GTToolbox\\figures'
 
 files = []
 images = []
@@ -18,5 +18,5 @@ for filename in files:
     images.append(imageio.imread(filename))
 
 imageio.mimsave(
-    'C:\\Users\\HarmelinkRLA\\Dropbox\\Universiteit Twente\\Papers\\Rarity Value\\figures\\Verzoek Reinoud\\gifs\\movie m loop, phi = 1.5, with rartiy value.gif',
+    'C:\\Users\\HarmelinkRLA\\Desktop\\tanh_pd_mb.gif',
     images, duration=0.2)

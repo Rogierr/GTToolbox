@@ -4,7 +4,7 @@ from sympy import *
 # COALITION VECTOR IS FILLED IN AS:
 # 1, 2, 3, (1,2), (1,3), (2,3), (1,2,3)
 
-coalition_vector = np.array([0, 0, 0, 4, 5, 4, 8])
+coalition_vector = np.array([1, 1, 4, 2, 9, 5, 10])
 
 print("Input coalition vector:")
 print(coalition_vector)

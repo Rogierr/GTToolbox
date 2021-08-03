@@ -27,6 +27,9 @@ class RepeatedGame:
 
         self.best_pure_strategies = np.array([[1, 0], [0, 1]])
 
+        self.dataframe = None
+        self.dataframe_pareto = None
+
     def define_learning_curve(self, curve):
 
         self.learning_curve = curve
@@ -47,6 +50,12 @@ class RepeatedGame:
 
     def compute_maximin(self, points, show_strat_p1, show_strat_p2):
         tp.optimized_maximin(self, points, show_strat_p1, show_strat_p2)
+
+    def plot_threat_point(self, k):
+        game_plot.plot_threat_point(self, k)
+
+    def plot_threat_point_lines(self, k):
+        game_plot.plot_threat_point_lines(self, k)
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""
@@ -192,8 +201,8 @@ class ETPGame:
     def plot_single_period_pure_rewards(self):
         game_plot.plot_single_period_pure_rewards(self)
 
-    def plot_threat_point(self, k):
-        game_plot.plot_threat_point(self, k)
+    def plot_threat_point(self):
+        game_plot.plot_threat_point(self)
 
     def plot_threat_point_lines(self):
         game_plot.plot_threat_point_lines(self)

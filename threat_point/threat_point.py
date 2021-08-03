@@ -10,7 +10,7 @@ from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
-from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu
+from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu, learning_curve_mu
 from FD_functions.mb_function import mb_function_p1, mb_function_p2
 from FD_functions.sb_function import sb_function_p1, sb_function_p2
 
@@ -44,6 +44,14 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         fd = fd_function(frequency_pairs)
     elif self.rarity:
         fd = mu_function(self, rho_function(frequency_pairs))
+
+    if self.learning_curve == 'learning':
+        if self.mu_function == 'sb':
+            fd = learning_curve_mu(self.phi, sb_function_p1(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = learning_curve_mu(self.phi, mb_function_p1(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
     if self.learning_curve == 'tanh':
         if self.mu_function == 'sb':
@@ -134,6 +142,14 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         fd = fd_function(frequency_pairs)
     elif self.rarity:
         fd = mu_function(self, rho_function(frequency_pairs))
+
+    if self.learning_curve == 'learning':
+        if self.mu_function == 'sb':
+            fd = learning_curve_mu(self.phi, sb_function_p2(frequency_pairs))
+        elif self.mu_function == 'mb':
+            fd = learning_curve_mu(self.phi, mb_function_p2(frequency_pairs))
+        elif not self.mu_function == False:
+            raise NameError("Not the correct type of mu function provided")
 
     if self.learning_curve == 'tanh':
         if self.mu_function == 'sb':
