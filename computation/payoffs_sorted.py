@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def payoffs_sorted(points, payoffs, actions):
+def payoffs_sorted(points: int, payoffs: np.ndarray, actions: int) -> np.ndarray:
     """This function sorts the payoffs in order to prepare the threat point"""
 
     # create ranges for points and actions
@@ -14,5 +14,6 @@ def payoffs_sorted(points, payoffs, actions):
     for x in np.nditer(points_range):
         for i in np.nditer(actions_range):
             payoffs_sort[x, i] = payoffs[points * i + x]
+
 
     return payoffs_sort

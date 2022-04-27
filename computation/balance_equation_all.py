@@ -9,6 +9,8 @@ def balance_equation_all(self, points, draw_payoffs):
     Q = np.zeros((1, points))
     Q_new = np.zeros((1, points))
 
+    print(Q.shape)
+    print(draw_payoffs.shape)
     yi[:, 0:self.payoff_p1_game1.size] = draw_payoffs[:, 0:self.payoff_p1_game1.size] / np.sum(
         draw_payoffs[:, 0:self.payoff_p1_game1.size], axis=1).reshape([points, 1])
     yi[:, self.payoff_p1_game1.size:self.total_payoffs] = draw_payoffs[:, self.payoff_p1_game1.size:self.total_payoffs] / np.sum(

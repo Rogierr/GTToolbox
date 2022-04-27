@@ -10,15 +10,13 @@ from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
-from FD_functions.mu_function import mu_function, tanh_mu, scurve_mu, learning_curve_mu
-from FD_functions.mb_function import mb_function_p1, mb_function_p2
-from FD_functions.sb_function import sb_function_p1, sb_function_p2
+from FD_functions.mu_function import mu_function
 
 
 __all__ = ['threat_point_optimized']
 
 
-def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text):
+def threat_point_optimized(self, points: int, show_strat_p1: bool, show_strat_p2: bool, print_text: bool) -> list:
     """Optimized threat point algorithm for ETP games"""
 
     if print_text:
@@ -28,64 +26,35 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
 
     start_time = time.time()  # timer start
 
-    y_punisher = random_strategy_draw(points, self.payoff_p2_actions)  # draw strategies for the punisher
+    y_punisher = random_strategy_draw(points, self.player_2_actions)  # draw strategies for the punisher
 
     frequency_pairs = frequency_pairs_p1(self, points, y_punisher)  # sort based on best reply
 
-    if self.class_games == 'ETP':
     # do the balance equations calculations
-        frequency_pairs = balance_equation(self, points, self.payoff_p1_game1.shape[0], self.payoff_p1_game2.shape[0],
-                                           self.payoff_p1_game1.size, self.total_payoffs, frequency_pairs)
+    # frequency_pairs = balance_equation(self, points, self.payoff_p1_game1.shape[0], self.payoff_p1_game2.shape[0],
+    #                                    self.payoff_p1_game1.size, self.total_payoffs, frequency_pairs)
+    #
+    # fd = 1
+    #
+    # # activate the FD function
+    # if self.FD:
+    #     fd = fd_function(frequency_pairs)
+    # elif self.rarity:
+    #     fd = mu_function(self, rho_function(frequency_pairs))
 
-    fd = 1
+    payoffs = np.sum(np.multiply(frequency_pairs, self.payoffs_p1.flatten()), axis=1)
 
-    # activate the FD function
-    if self.FD:
-        fd = fd_function(frequency_pairs)
-    elif self.rarity:
-        fd = mu_function(self, rho_function(frequency_pairs))
+    # if self.rarity:
+    #     print("Plotting with rarity active")
+    #     payoffs = np.multiply(fd, payoffs)
+    #     payoffs = np.multiply(profit_function(fd), payoffs)
+    #     payoffs = payoffs.reshape((payoffs.size, 1))
+    # else:
+    #     # compute the payoffs with payoffs and FD function
+    #     payoffs = np.multiply(fd, payoffs)
+    #     payoffs = payoffs.reshape((payoffs.size, 1))
 
-    if self.learning_curve == 'learning':
-        if self.mu_function == 'sb':
-            fd = learning_curve_mu(self.phi, sb_function_p1(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = learning_curve_mu(self.phi, mb_function_p1(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    if self.learning_curve == 'tanh':
-        if self.mu_function == 'sb':
-            fd = tanh_mu(self.phi, sb_function_p1(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = tanh_mu(self.phi, mb_function_p1(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    if self.learning_curve == 'scurve':
-        if self.mu_function == 'sb':
-            fd = scurve_mu(self.phi, sb_function_p1(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = scurve_mu(self.phi, mb_function_p1(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p1), axis=1)
-
-    if self.rarity:
-        print("Plotting with rarity active")
-        payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
-        payoffs = payoffs.reshape((payoffs.size, 1))
-    else:
-        # compute the payoffs with payoffs and FD function
-        payoffs = np.multiply(fd, payoffs)
-        payoffs = payoffs.reshape((payoffs.size, 1))
-
-    if self.class_games == 'ETP':
-        max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p1_game1.shape[0] * self.payoff_p1_game2.shape[0]))
-    else:
-        max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p1_actions)
-
+    max_payoffs = payoffs_sorted(points, payoffs, self.payoffs_p1.shape[0])
     # sort the payoffs
     nan_delete = np.where(np.isnan(max_payoffs))  # delete payoffs which are a NaN
 
@@ -115,7 +84,7 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         print("Seconds done to generate", points, "points", end_time - start_time)
         print("")
 
-    # End of algorithm player 1 (checked)
+    # End of algorithm player 1
 
     # Start of algorithm player 2
 
@@ -125,64 +94,35 @@ def threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_tex
         print("First start the threat point for player 2")
     start_time_p2 = time.time()  # start the time (for p2)
 
-    x_punisher = random_strategy_draw(points, self.payoff_p1_actions)  # draw some awesome strategies
+    x_punisher = random_strategy_draw(points, self.player_1_actions)  # draw some awesome strategies
 
-    frequency_pairs = frequency_pairs_p2(self, points, self.payoff_p2_actions, self.payoff_p1_actions,
-                                         x_punisher)  # sort them based on best replies
+    frequency_pairs = frequency_pairs_p2(self, points, x_punisher)  # sort them based on best replies
 
-    if self.class_games == 'ETP':
-        # do some balance equation accelerator magic
-        frequency_pairs = balance_equation(self, points, self.payoff_p2_game1.shape[1], self.payoff_p2_game2.shape[1],
-                                           self.payoff_p2_game1.size, self.total_payoffs, frequency_pairs)
+    # # do some balance equation accelerator magic
+    # frequency_pairs = balance_equation(self, points, self.payoff_p2_game1.shape[1], self.payoff_p2_game2.shape[1],
+    #                                    self.payoff_p2_game1.size, self.total_payoffs, frequency_pairs)
+    #
+    # fd = 1
+    #
+    # # activate FD function
+    # if self.FD:
+    #     fd = fd_function(frequency_pairs)
+    # elif self.rarity:
+    #     fd = mu_function(self, rho_function(frequency_pairs))
+    #
+    #     # payoffs are calculated
+    payoffs = np.sum(np.multiply(frequency_pairs, self.payoffs_p2.flatten()), axis=1)
+    #
+    # if self.rarity:
+    #     payoffs = np.multiply(fd, payoffs)
+    #     payoffs = np.multiply(profit_function(fd), payoffs)
+    #     payoffs = payoffs.reshape((payoffs.size, 1))
+    # else:
+    #     # compute the payoffs with payoffs and FD function
+    #     payoffs = np.multiply(fd, payoffs)
+    #     payoffs = payoffs.reshape((payoffs.size, 1))
 
-    fd = 1
-
-    # activate FD function
-    if self.FD:
-        fd = fd_function(frequency_pairs)
-    elif self.rarity:
-        fd = mu_function(self, rho_function(frequency_pairs))
-
-    if self.learning_curve == 'learning':
-        if self.mu_function == 'sb':
-            fd = learning_curve_mu(self.phi, sb_function_p2(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = learning_curve_mu(self.phi, mb_function_p2(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    if self.learning_curve == 'tanh':
-        if self.mu_function == 'sb':
-            fd = tanh_mu(self.phi, sb_function_p2(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = tanh_mu(self.phi, mb_function_p2(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    if self.learning_curve == 'scurve':
-        if self.mu_function == 'sb':
-            fd = scurve_mu(self.phi, sb_function_p2(frequency_pairs))
-        elif self.mu_function == 'mb':
-            fd = scurve_mu(self.phi, mb_function_p2(frequency_pairs))
-        elif not self.mu_function == False:
-            raise NameError("Not the correct type of mu function provided")
-
-    # payoffs are calculated
-    payoffs = np.sum(np.multiply(frequency_pairs, self.payoff_p2), axis=1)
-    if self.rarity:
-        payoffs = np.multiply(fd, payoffs)
-        payoffs = np.multiply(profit_function(fd), payoffs)
-        payoffs = payoffs.reshape((payoffs.size, 1))
-    else:
-        # compute the payoffs with payoffs and FD function
-        payoffs = np.multiply(fd, payoffs)
-        payoffs = payoffs.reshape((payoffs.size, 1))
-
-    if self.class_games == 'ETP':
-        max_payoffs = payoffs_sorted(points, payoffs, (self.payoff_p2_game1.shape[1] * self.payoff_p2_game2.shape[1]))
-    else:
-        max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p2_actions)
-
+    max_payoffs = payoffs_sorted(points, payoffs, self.payoff_p2_game1.shape[1])
     # awesome sorting process
     nan_delete = np.where(np.isnan(max_payoffs))  # look for NaN's
 

@@ -2,60 +2,59 @@ import numpy as np
 import plotting as game_plot
 import threat_point as tp
 
+
 class RepeatedGame:
-    """The Repeated Game Class represents the repeated games from the thesis, with or without ESP"""
 
-    def __init__(self, payoff_p1, payoff_p2):
+    def __init__(self, payoffs_p1: np.ndarray, payoffs_p2: np.ndarray):
+        if type(payoffs_p1) is np.ndarray and type(payoffs_p2) is np.ndarray:
+            if payoffs_p1.shape == payoffs_p2.shape:
+                if (payoffs_p1.dtype == 'float64' or payoffs_p1.dtype == 'int32') and \
+                        (payoffs_p2.dtype == 'float64' or payoffs_p2.dtype == 'int32'):
+                    self.type = "RepeatedGame"
 
-        self.payoff_p1 = payoff_p1.A1
-        self.payoff_p2 = payoff_p2.A1
-        self.class_games = 'Repeated'
-        self.FD = False
-        self.rarity = False
-        self.plotting_rarity = False
-        self.learning_curve = False
-        self.mu_function = False
-        self.phi = 1
+                    self.payoffs_p1 = payoffs_p1
+                    self.payoffs_p2 = payoffs_p2
 
-        self.total_payoffs = self.payoff_p1.size
+                    self.total_payoffs = self.payoffs_p1.size
 
-        self.payoff_p1_actions = payoff_p1.shape[0]
-        self.payoff_p2_actions = payoff_p2.shape[1]
+                    self.player_1_actions = self.payoffs_p1.shape[0]
+                    self.player_2_actions = self.payoffs_p2.shape[1]
 
-        self.payoff_p1_game1 = self.payoff_p1
-        self.payoff_p2_game1 = self.payoff_p2
+                    self.payoff_p1_game1 = payoffs_p1
+                    self.payoff_p2_game1 = payoffs_p2
 
-        self.best_pure_strategies = np.array([[1, 0], [0, 1]])
+                    self.best_pure_strategies = np.array([[1, 0], [0, 1]])
 
-        self.dataframe = None
-        self.dataframe_pareto = None
+                else:
+                    raise TypeError(
+                        "The Numpy Arrays containing the payoffs can only contain integers or floating types.")
+            else:
+                raise ValueError("The payoffs of the game should have the same dimensions.")
+        else:
+            raise TypeError("The inputted payoffs for both players should be of a type np.array.")
 
-    def define_learning_curve(self, curve):
+    def plot_single_period_pure_rewards(self):
+        game_plot.plot_single_period_pure_rewards(self)
 
-        self.learning_curve = curve
+    def plot_all_rewards(self, points: int):
+        game_plot.plot_all_rewards(self, points)
 
-    def define_mu(self, mu):
+    def compute_threat_point(self, points: int, show_p1: bool, show_p2: bool, print_text: bool):
+        tp.threat_point_optimized(self, points, show_p1, show_p2, print_text)
 
-        self.mu_function = mu
+    def plot_threat_point(self):
+        game_plot.plot_threat_point(self)
 
-    def set_phi(self, phi):
+    def plot_threat_point_lines(self):
+        game_plot.plot_threat_point_lines(self)
 
-        self.phi = phi
+    def compute_maximin(self, points: int, show_p1: int, show_p2: int):
+        tp.optimized_maximin(self, points, show_p1, show_p2)
 
-    def plot_all_rewards(self, points, title):
-        game_plot.plot_all_rewards(self, points, title)
 
-    def compute_threat_point(self, points, show_strat_p1, show_strat_p2, print_text=True):
-        tp.threat_point_optimized(self, points, show_strat_p1, show_strat_p2, print_text)
+class StochasticGame:
+    print("Currently only a placeholder for a class to be implemented")
 
-    def compute_maximin(self, points, show_strat_p1, show_strat_p2):
-        tp.optimized_maximin(self, points, show_strat_p1, show_strat_p2)
-
-    def plot_threat_point(self, k):
-        game_plot.plot_threat_point(self, k)
-
-    def plot_threat_point_lines(self, k):
-        game_plot.plot_threat_point_lines(self, k)
 
 class ETPGame:
     """The ETP Game class represents the Type III games from the thesis, with or without ESP."""
@@ -64,6 +63,7 @@ class ETPGame:
                  trmatrixg3, trmatrixg4, matrixa):
         """Here below we initialize the game by storing payoff and transition matrices according to the upper input."""
 
+        self.type = 'ETPGame'
         # here below we just store some values that are being put in
         self.payoff_p1_game1 = payoff_p1_game1  # payoff p1 in game 1
         self.payoff_p2_game1 = payoff_p2_game1  # payoff p2 in game 1
@@ -79,11 +79,11 @@ class ETPGame:
         # here below we just store some values that are being put in
 
         # some adjustments on the size of the games
-        self.payoff_p1_g1_flat = self.payoff_p1_game1.A1  # store the flatten payoff of p1 game 1
-        self.payoff_p2_g1_flat = self.payoff_p2_game1.A1  # store the flatten payoff of p2 game 1
+        self.payoff_p1_g1_flat = self.payoff_p1_game1.flatten()  # store the flatten payoff of p1 game 1
+        self.payoff_p2_g1_flat = self.payoff_p2_game1.flatten()  # store the flatten payoff of p2 game 1
 
-        self.payoff_p1_g2_flat = self.payoff_p1_game2.A1  # store the flatten payoff of p1 game 2
-        self.payoff_p2_g2_flat = self.payoff_p2_game2.A1  # store the flatten payoff of p2 game 2
+        self.payoff_p1_g2_flat = self.payoff_p1_game2.flatten()  # store the flatten payoff of p1 game 2
+        self.payoff_p2_g2_flat = self.payoff_p2_game2.flatten()  # store the flatten payoff of p2 game 2
 
         self.payoff_p1_size = self.payoff_p1_g1_flat.size + self.payoff_p1_g2_flat.size
         self.payoff_p2_size = self.payoff_p2_g1_flat.size + self.payoff_p2_g2_flat.size
@@ -110,7 +110,7 @@ class ETPGame:
         # here above are some adjustments on the size of the games
 
         # here below we create px
-        self.px = np.concatenate([self.trans_matr_game1_to1_flat, self.trans_matr_game2_to1_flat], axis=1)
+        self.px = np.concatenate([self.trans_matr_game1_to1_flat, self.trans_matr_game2_to1_flat])
 
         self.payoff_p1_merged = np.concatenate((self.payoff_p1_g1_flat, self.payoff_p1_g2_flat))  # merge p1 payoffs
         self.payoff_p2_merged = np.concatenate((self.payoff_p2_g1_flat, self.payoff_p2_g2_flat))  # merge p2 payoffs
@@ -127,7 +127,6 @@ class ETPGame:
         self.printing = False  # set printing to False
         self.phi = 0
         self.m = 0
-        self.class_games = 'ETP'
 
         self.best_pure_strategies = np.array([[1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1]])
 
@@ -189,11 +188,11 @@ class ETPGame:
         print("Plotting rarity is now:", self.plotting_rarity)
 
     # above this line we have some game options functions
-
+    # checked until here
     # below this line we incorporate some functions within the class
 
-    def plot_all_rewards(self, points, title):
-        game_plot.plot_all_rewards(self, points, title)
+    def plot_all_rewards(self, points):
+        game_plot.plot_all_rewards(self, points)
 
     def plot_convex_hull_pure_rewards(self):
         game_plot.plot_convex_hull_pure_rewards(self)

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def random_strategy_draw(points, number_of_actions):
+def random_strategy_draw(points: int, number_of_actions: int) -> np.ndarray:
     """This function draws random strategies from a beta distribution, based on the number of points and actions"""
 
     # draw some strategies and normalize them
