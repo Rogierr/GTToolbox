@@ -3,9 +3,9 @@ import numpy as np
 from scipy.spatial import ConvexHull  # import scipy convex hull package
 import matplotlib.pyplot as plt  # import package to plot stuff
 from computation.compute_rewards import compute_rewards
+from computation.pareto_efficiency import is_pareto_efficient
 
-
-__all__ = ['plot_convex_hull_pure_rewards', 'plot_single_period_pure_rewards', 'plot_all_rewards']
+__all__ = ['plot_convex_hull_pure_rewards', 'plot_single_period_pure_rewards', 'plot_all_rewards', 'plot_pareto_rewards']
 
 
 def plot_convex_hull_pure_rewards(game):
@@ -29,7 +29,7 @@ def plot_single_period_pure_rewards(self):
         payoffs_p1_flat = self.payoffs_p1.flatten()
         payoffs_p2_flat = self.payoffs_p2.flatten()
 
-        plt.scatter(payoffs_p1_flat, payoffs_p2_flat, label="Pure rewards points", zorder=15)
+        plt.scatter(payoffs_p1_flat, payoffs_p2_flat, label="Pure rewards points", zorder=15, color='y')
     else:
 
         payoff_p1_g1_flat = self.payoff_p1_game1.A1  # create a flattend payoff of p1 in game 1
@@ -45,8 +45,7 @@ def plot_single_period_pure_rewards(self):
     plt.xlabel("Reward Player 1")  # giving the x-axis the label of payoff p1
     plt.ylabel("Reward Player 2")  # and the payoff of the y-axis is that of p2
     plt.title("Reward points of {0}".format(self.type))  # and we give it a nice titel
-    plt.legend()
-    plt.show()
+    # plt.show()
 
 
 def plot_all_rewards(self, points: int):
@@ -68,11 +67,10 @@ def plot_all_rewards(self, points: int):
     # all_payoffs = np.transpose(all_payoffs)
     # Convex_Hull_Payoffs = ConvexHull(all_payoffs, qhull_options='QbB')
 
-    plt.figure()
-    plt.title("Total rewards")
+    plt.title("Prisoner's Dilemma - Basic Game")
     plt.xlabel("Rewards player 1")
     plt.ylabel("Rewards player 2")
-    plt.scatter(payoffs_p1, payoffs_p2, s=0.3)
+    plt.scatter(payoffs_p1, payoffs_p2, s=0.3, label='Reward points')
 
     plt.axis('equal')
 
@@ -81,3 +79,11 @@ def plot_all_rewards(self, points: int):
 
     print("Total time taken to plot all reward points:", end_time - start_time)
 
+
+def plot_pareto_rewards(self, points):
+
+    payoffs_p1, payoffs_p2 = compute_rewards(self, points)
+    prepared_array = np.array([payoffs_p1, payoffs_p2]).T
+    pareto_efficient = is_pareto_efficient(prepared_array)
+    pareto_rewards = prepared_array[pareto_efficient]
+    plt.scatter(pareto_rewards[:, 0], pareto_rewards[:, 1], color='g', label='Pareto efficient rewards', zorder=1000)

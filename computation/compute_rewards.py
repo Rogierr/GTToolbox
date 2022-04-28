@@ -33,21 +33,23 @@ def compute_rewards(self, points: int):
     payoffs_p1 = np.sum(np.multiply(draw_payoffs, self.payoffs_p1.flatten()), axis=1)
     payoffs_p2 = np.sum(np.multiply(draw_payoffs, self.payoffs_p2.flatten()), axis=1)
 
-    if self.plotting_rarity == "Rarity":
-        payoffs_p1 = np.multiply(fd, payoffs_p1)
-        payoffs_p2 = np.multiply(fd, payoffs_p2)
-        print("Plotting with rarity active")
-        payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
-        payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
-    elif self.FD or self.rarity:
-        print("Normal plotting active")
-        payoffs_p1 = np.multiply(fd, payoffs_p1)
-        payoffs_p2 = np.multiply(fd, payoffs_p2)
+    if hasattr(self, 'plotting_rarity'):
+        if self.plotting_rarity == "Rarity":
+            payoffs_p1 = np.multiply(fd, payoffs_p1)
+            payoffs_p2 = np.multiply(fd, payoffs_p2)
+            print("Plotting with rarity active")
+            payoffs_p1 = np.multiply(profit_function(fd), payoffs_p1)
+            payoffs_p2 = np.multiply(profit_function(fd), payoffs_p2)
+        elif self.FD or self.rarity:
+            print("Normal plotting active")
+            payoffs_p1 = np.multiply(fd, payoffs_p1)
+            payoffs_p2 = np.multiply(fd, payoffs_p2)
 
     # here below we just randomly throw out some stuff
 
-    payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
-    payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
+    if self.type == 'ETPGame':
+        payoffs_p1 = np.delete(payoffs_p1, mu_indic[0], 0)
+        payoffs_p2 = np.delete(payoffs_p2, mu_indic[0], 0)
 
     delete_indic = np.where(np.isnan(payoffs_p1))
     payoffs_p1 = np.delete(payoffs_p1, delete_indic[0], 0)

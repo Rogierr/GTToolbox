@@ -39,6 +39,9 @@ class RepeatedGame:
     def plot_all_rewards(self, points: int):
         game_plot.plot_all_rewards(self, points)
 
+    def plot_pareto_rewards(self, points: int):
+        game_plot.plot_pareto_rewards(self, points)
+
     def compute_threat_point(self, points: int, show_p1: bool, show_p2: bool, print_text: bool):
         tp.threat_point_optimized(self, points, show_p1, show_p2, print_text)
 
