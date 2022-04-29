@@ -33,14 +33,14 @@ class RepeatedGame:
         else:
             raise TypeError("The inputted payoffs for both players should be of a type np.array.")
 
-    def plot_single_period_pure_rewards(self):
-        game_plot.plot_single_period_pure_rewards(self)
+    def plot_single_period_pure_rewards(self, DSD, bf):
+        game_plot.plot_single_period_pure_rewards(self, DSD, bf)
 
-    def plot_all_rewards(self, points: int):
-        game_plot.plot_all_rewards(self, points)
+    def plot_all_rewards(self, points: int, DSD, bf):
+        game_plot.plot_all_rewards(self, points, DSD, bf)
 
-    def plot_pareto_rewards(self, points: int):
-        game_plot.plot_pareto_rewards(self, points)
+    def plot_pareto_rewards(self, points: int, DSD, bf):
+        game_plot.plot_pareto_rewards(self, points, DSD, bf)
 
     def compute_threat_point(self, points: int, show_p1: bool, show_p2: bool, print_text: bool):
         tp.threat_point_optimized(self, points, show_p1, show_p2, print_text)

@@ -23,6 +23,6 @@ def scurve_mu(phi, x):
 
     return phi+scurve(x)
 
-def learning_curve_mu(phi, x):
+def learning_curve_mu(x):
 
-    return phi+(1.1*(1 - (0.1/(x+0.1))))
+    return 1.1*(1 - (0.1/(x+0.1)))

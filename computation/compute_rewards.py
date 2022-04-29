@@ -3,12 +3,14 @@ import numpy as np
 from computation.balance_equation_all import balance_equation_all
 from computation.random_strategy_draw import random_strategy_draw
 from FD_functions.fd_function import fd_function
-from FD_functions.mu_function import mu_function
+from FD_functions.mb_function import mb_function_p1, mb_function_p2
+from FD_functions.sb_function import sb_function_p1, sb_function_p2
+from FD_functions.mu_function import mu_function, learning_curve_mu
 from FD_functions.rho_function import rho_function
 from FD_functions.profit_function import profit_function
 
 
-def compute_rewards(self, points: int):
+def compute_rewards(self, points: int, DSD: bool = False, benefit_function: str = ''):
 
     draw_payoffs = random_strategy_draw(points, self.total_payoffs)
 
@@ -44,6 +46,26 @@ def compute_rewards(self, points: int):
             print("Normal plotting active")
             payoffs_p1 = np.multiply(fd, payoffs_p1)
             payoffs_p2 = np.multiply(fd, payoffs_p2)
+
+    if DSD:
+        if benefit_function == 'mb':
+            fd_p1 = learning_curve_mu(mb_function_p1(draw_payoffs))
+            fd_p2 = learning_curve_mu(mb_function_p2(draw_payoffs))
+
+            payoffs_p1_fd = np.multiply(fd_p1, payoffs_p1)
+            payoffs_p2_fd = np.multiply(fd_p2, payoffs_p2)
+
+            payoffs_p1 = np.add(payoffs_p1_fd, payoffs_p1)
+            payoffs_p2 = np.add(payoffs_p2_fd, payoffs_p2)
+        elif benefit_function == 'sb':
+            fd_p1 = learning_curve_mu(sb_function_p1(draw_payoffs))
+            fd_p2 = learning_curve_mu(sb_function_p2(draw_payoffs))
+
+            payoffs_p1_fd = np.multiply(fd_p1, payoffs_p1)
+            payoffs_p2_fd = np.multiply(fd_p2, payoffs_p2)
+
+            payoffs_p1 = np.add(payoffs_p1_fd, payoffs_p1)
+            payoffs_p2 = np.add(payoffs_p2_fd, payoffs_p2)
 
     # here below we just randomly throw out some stuff
 
