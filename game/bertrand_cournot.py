@@ -1,6 +1,7 @@
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+from computation.pareto_efficiency import is_pareto_efficient
 
 
 class ETPGame:
@@ -89,7 +90,7 @@ class ETPGame:
         draw_rho12 = np . random . beta (2 ,8)
         draw_rho21 = np . random . beta (2 ,8)
         draw_rho22 = 0
-        print ( draw_rho11 , draw_rho12 , draw_rho21 , draw_rho22 )
+        # print ( draw_rho11 , draw_rho12 , draw_rho21 , draw_rho22 )
         sum_draw = draw_rho11 + draw_rho12 + draw_rho21 + draw_rho22 # Sum the rho 's
         gen_rho11 = draw_rho11 / sum_draw # divide single entries by sum to get values between 0 and 1
         gen_rho12 = draw_rho12 / sum_draw
@@ -353,6 +354,17 @@ class ETPGame:
 
         self . extra_equilibrium_total = extra_equilibrium_total
 
+        print(self.equilibrium_matrix_total.shape)
+        print(self.extra_equilibrium_total.shape)
+        print(self.pure_equilibrium_total.shape)
+
+        self.all_rewards = np.concatenate((self.equilibrium_matrix_total, self.extra_equilibrium_total), axis=0)
+        self.all_rewards = np.concatenate((self.all_rewards, self.pure_equilibrium_total), axis=0)
+        print(self.all_rewards.shape)
+
+        pareto_efficient_rewards = is_pareto_efficient(self.all_rewards)
+        print(np.where(pareto_efficient_rewards))
+
         # Lastly we end the timer and print how long the process took
         end_time = time . time () # stops the timer
         print (" Running time for equilibrium points generation :", end_time - start_time )
@@ -362,17 +374,17 @@ class ETPGame:
 
         if self . game_type == 0:
             # Plots first two entries of equilibrium point , does not require axis assigning .
-            plt . scatter ( self . pure_equilibrium_total [0 ,0] , self . pure_equilibrium_total [0 ,1] , color ='r', zorder =2 , s =10 , label ="Pure strategy [1 , 0, 0, 0]")
-            plt . scatter ( self . pure_equilibrium_total [1 ,0] , self .pure_equilibrium_total [1 ,1] , color ='gold', zorder =2 , s =10 , label =" Pure strategy [0 , 1, 0, 0]")
-            plt . scatter ( self . pure_equilibrium_total [2 ,0] , self . pure_equilibrium_total [2 ,1] , color ='b', zorder =2 , s =10 , label ="Pure strategy [0 , 0, 1, 0]")
-            plt . scatter ( self . pure_equilibrium_total [3 ,0] , self . pure_equilibrium_total [3 ,1] , color ='g', zorder =2 , s =10 , label ="Pure strategy [0 , 0, 0, 1]")
-            plt . scatter ( self . equilibrium_matrix_total [: ,0] , self . equilibrium_matrix_total [: ,1] , color ='cyan', zorder =1 , s=1 , label ="LAR regular Bertrand ")
+            plt . scatter ( self . pure_equilibrium_total [: ,0] , self . pure_equilibrium_total [: ,1] , color ='r', zorder =2 , s =10 , label ="Pure strategy")
+            # plt . scatter ( self . pure_equilibrium_total [1 ,0] , self .pure_equilibrium_total [1 ,1] , color ='r', zorder =2 , s =10 , label ="Pure strategy")
+            # plt . scatter ( self . pure_equilibrium_total [2 ,0] , self . pure_equilibrium_total [2 ,1] , color ='r', zorder =2 , s =10 , label ="Pure strategy")
+            # plt . scatter ( self . pure_equilibrium_total [3 ,0] , self . pure_equilibrium_total [3 ,1] , color ='r', zorder =2 , s =10 , label ="Pure strategy")
+            plt . scatter ( self . equilibrium_matrix_total [: ,0] , self . equilibrium_matrix_total [: ,1] , color ='cyan', zorder =1 , s=1 , label ="Rewards Bertrand ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='cyan', zorder =1 , s =1)
-            plt . title (" Limiting average rewards for regular Bertrand competition ")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
-            plt . figtext (0.15 , 0.85 , " ac0a = 900 , ac0b = 150 ", horizontalalignment ="left", verticalalignment ="top", wrap = True , fontsize = 10 , bbox ={ 'facecolor': 'grey', 'alpha':0.3 , 'pad':5})
+            plt . title ("Regular Bertrand competition with ad_varA = " + str(self.ad_varA))
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
+            # plt . figtext (1, 1, " x = " + str(self.x) , wrap = True , fontsize = 10 , bbox ={ 'facecolor': 'grey', 'alpha':0.3 , 'pad':5})
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
             print (" With variable advertisement investment cost for player A at:", self . ad_varA )
@@ -390,10 +402,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,0] , self . equilibrium_matrix_total [: ,1] , color ='aqua', zorder =1 , s=1 , label ="LAR Stackelberg - Bertrand ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='aqua', zorder =1 , s =1)
             plt . title (" Limiting average rewards for Stack .- Bertrand competition (L-A, F-B).")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
             print (" With variable advertisement investment cost for player A at:", self . ad_varA )
@@ -411,9 +422,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,2] , self . equilibrium_matrix_total [: ,3] , color ='aqua', zorder =1 , s=1 , label ="LAR Stackelberg - Bertrand ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='aqua', zorder =1 , s =1)
             plt . title (" Limiting average rewards for Stackelberg - Bertrand competition with Leader B and Follower A.")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             plt . figtext (0.15 , 0.85 , " ac0a = ac0b = 150 ", horizontalalignment ="left", verticalalignment ="top", wrap =True , fontsize = 10 , bbox ={ 'facecolor':'grey', 'alpha ':0.3 , 'pad ':5})
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
@@ -433,9 +444,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,0] , self . equilibrium_matrix_total [: ,1] , color ='teal', zorder =1 , s=1 , label ="LAR collusion Bertrand ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='teal', zorder =1 , s =1)
             plt . title (" Limiting average rewards for collusion under Bertrand competition .")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
             print (" With variable advertisement investment cost for player A at:", self . ad_varA )
@@ -453,9 +464,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,0] , self .equilibrium_matrix_total [: ,1] , color ='pink', zorder =1 , s=1 , label ="LAR regular Cournot ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self .extra_equilibrium_total [: ,1] , color ='pink', zorder =1 , s =1)
             plt . title (" Limiting average rewards for regular Cournot competition .")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             plt . figtext (0.80 , 0.85 , "u = 0", horizontalalignment ="left", verticalalignment ="top", wrap = True , fontsize = 10 ,bbox ={ 'facecolor':'grey', 'alpha':0.3 , 'pad':5})
             # plt . figtext (0.80 , 0.85 , "u = 0" , horizontalalignment =" left ", verticalalignment =" top ", wrap = True , fontsize = 10 , box ={ ' facecolor ':' grey ', 'alpha ':0.3 , 'pad ':5})
             # plt . show ()
@@ -475,9 +486,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,0] , self .equilibrium_matrix_total [: ,1] , color ='orchid', zorder =1 , s=1 , label ="LAR Stackelberg - Cournot ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='orchid', zorder =1 , s=1)
             plt . title (" Limiting average rewards for Stackelberg - Cournot competition with Leader A and Follower B.")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             # plt . show ()
 
             print (" With the positive intercept for demand at:", self .x)
@@ -496,9 +507,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,2] , self . equilibrium_matrix_total [: ,3] , color ='orchid', zorder =1 , s=1 , label ="LAR Stackelberg - Cournot ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='orchid', zorder =1 , s=1)
             plt . title (" Limiting average rewards for Stack .- Cournot competition (L-B,F-A).")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
             print (" With variable advertisement investment cost for player A at:", self . ad_varA )
@@ -516,9 +527,9 @@ class ETPGame:
             plt . scatter ( self . equilibrium_matrix_total [: ,0] , self . equilibrium_matrix_total [: ,1] , color ='violet', zorder =1 , s=1 , label ="LAR collusion Cournot ")
             plt . scatter ( self . extra_equilibrium_total [: ,0] , self . extra_equilibrium_total [: ,1] , color ='violet', zorder =1 , s=1)
             plt . title (" Limiting average rewards for collusion under Cournot competition .")
-            plt . xlabel (" Optimal profit player A")
-            plt . ylabel (" Optimal profit player B")
-            plt . legend ( loc ='center left', bbox_to_anchor =(1.1 , 0.5) , labelspacing =3)
+            plt . xlabel ("Rewards player A")
+            plt . ylabel ("Rewards player B")
+            plt . legend ()
             # plt . show ()
             print (" With the positive intercept for demand at:", self .x)
             print (" With variable advertisement investment cost for player A at:", self . ad_varA )
